@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<!-- saved from url=(0087)http://rstudio-pubs-static.s3.amazonaws.com/21221_98a7657070da4f62a26a0e7708d42448.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta http-equiv="x-ua-compatible" content="IE=9">
+
+<title>Analysing Storm Events Database to Prepare for Severe Weather Events - Reproducible research - Peerassessment2</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<style type="text/css"></style></head>
+
+<body>
+<h1>Analysing Storm Events Database to Prepare for Severe Weather Events - Reproducible research - Peerassessment2</h1>
+
+<h2>Synopsis</h2>
+
+<p>This document provides an analysis of U.S. National Oceanic and Atmospheric Administration's (NOAA) <a href="http://www.ncdc.noaa.gov/stormevents/">Storm Events Database</a> in order to address the question of which major weather events are most harmful with respect to population health and/or have the greatest economic consequences. Based on it, a government or municipal manager might be prepared for severe weather events and prioritize resources for different types
+of events. It's part of the second assignment from the Coursera's Reproducible Research online course.</p>
+
+<h2>Data files</h2>
+
+<p>The main data file used in this analysis is a 47Mb comma-separated-value file compressed via the bzip2 algorithm that can be downloaded from the course web site.</p>
+
+<ul>
+<li>Main data file: <a href="https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2">repdata data StormData.csv.bz2</a></li>
+</ul>
+
+<p>Additionally, we've used two more files that allowed us to 1) map inconsistent event type descriptions to the limited list of 48 event types, as defined in NOAA's National Weather Service (NWS) Directive 10-1605 and 2) adjust economic damages for inflation. These files are available at my GitHub <a href="https://github.com/pjpjean/RepData_PeerAssessment2">public repository</a>:</p>
+
+<ul>
+<li><p><a href="https://raw.githubusercontent.com/pjpjean/RepData_PeerAssessment2/master/evtypes-directive-10-1605.csv">evtypes-directive-10-1605.csv</a>: a manually built mapping from the 985 different event types in the original data file to the NWS's 48-event types list, according to (my best judgment of) Directive 10-1605 guidelines.</p></li>
+<li><p><a href="https://raw.githubusercontent.com/pjpjean/RepData_PeerAssessment2/master/bls-cpi-1950-2013.csv">bls-cpi-1950-2013.csv</a>: Average Consumer Price Index for all calendar years in the 1950-2013 period, adjusted relatively to 1982-84 (index=100). These indexes were downloaded from the Bureau Labor Statistics (BLS) <a href="http://data.bls.gov/pdq/SurveyOutputServlet">website</a>, with the following parameters: <strong>Series ID</strong>, CUUR0000SA0; <strong>Year range</strong>: 1950-2013; <strong>One Time period</strong>: Annual Data; <strong>Output format</strong>: Text, comma delimited.</p></li>
+</ul>
+
+<h2>Data processing</h2>
+
+<p>We begin by loading the main data file into R. Because it's a bzip2 compressed file,  we have to create a bzip2 file connection and pass it to <code>read.csv()</code> instead of just the filename. We split the reading in two parts in order to select just the columns we need for our analysis.</p>
+
+<pre><code class="r"><span class="comment"># Read only the first line to get columns names (to be able to select just a few</span>
+<span class="comment"># of them when reading the full dataset). Notice the bzip2 file connection we</span>
+<span class="comment"># create and close just after using it.</span>
+<span class="comment">##filecon = bzfile("repdata-data-StormData.csv.bz2", "r")</span>
+<span class="comment">##col.names = colnames(read.csv(filecon, nrows=1))</span>
+<span class="comment"># If we don't close this connection now, next call to read.csv() will resume </span>
+<span class="comment"># from where it stopped, but we don't want this.</span>
+<span class="comment">#close(filecon)</span>
+
+<span class="comment"># define needed columns</span>
+<span class="identifier">col.names</span> <span class="operator">=</span> <span class="identifier">colnames</span><span class="paren">(</span><span class="identifier">read.csv</span><span class="paren">(</span><span class="string">"repdata-data-StormData.csv"</span>, <span class="identifier">nrows</span><span class="operator">=</span><span class="number">1</span><span class="paren">)</span><span class="paren">)</span>
+<span class="identifier">cols.to.read</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="string">"BGN_DATE"</span>, <span class="string">"COUNTY"</span>, <span class="string">"STATE"</span>, <span class="string">"EVTYPE"</span>, <span class="string">"FATALITIES"</span>, 
+                 <span class="string">"INJURIES"</span>, <span class="string">"PROPDMG"</span>, <span class="string">"PROPDMGEXP"</span>, <span class="string">"CROPDMG"</span>, <span class="string">"CROPDMGEXP"</span><span class="paren">)</span>
+
+
+<span class="comment"># Read file from the beginning (new connection), keeping just the needed columns.</span>
+<span class="comment">##filecon = bzfile("repdata-data-StormData.csv.bz2", "r")</span>
+<span class="identifier">storm</span> <span class="operator">=</span> <span class="identifier">read.csv</span><span class="paren">(</span><span class="string">"repdata-data-StormData.csv"</span>, <span class="identifier">colClasses</span><span class="operator">=</span><span class="identifier">c</span><span class="paren">(</span><span class="string">"NULL"</span>, <span class="literal">NA</span><span class="paren">)</span><span class="paren">[</span><span class="paren">(</span><span class="identifier">col.names</span> <span class="operator">%in%</span> <span class="identifier">cols.to.read</span><span class="paren">)</span><span class="operator">+</span><span class="number">1</span><span class="paren">]</span><span class="paren">)</span>
+<span class="comment">#close(filecon)</span>
+</code></pre>
+
+<p>Let's take a look at our data.</p>
+
+<pre><code class="r"><span class="identifier">str</span><span class="paren">(</span><span class="identifier">storm</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>## 'data.frame':    902297 obs. of  10 variables:
+##  $ BGN_DATE  : Factor w/ 16335 levels "1/1/1966 0:00:00",..: 6523 6523 4242 11116 2224 2224 2260 383 3980 3980 ...
+##  $ COUNTY    : num  97 3 57 89 43 77 9 123 125 57 ...
+##  $ STATE     : Factor w/ 72 levels "AK","AL","AM",..: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ EVTYPE    : Factor w/ 985 levels "   HIGH SURF ADVISORY",..: 834 834 834 834 834 834 834 834 834 834 ...
+##  $ FATALITIES: num  0 0 0 0 0 0 0 0 1 0 ...
+##  $ INJURIES  : num  15 0 2 2 2 6 1 0 14 0 ...
+##  $ PROPDMG   : num  25 2.5 25 2.5 2.5 2.5 2.5 2.5 25 25 ...
+##  $ PROPDMGEXP: Factor w/ 19 levels "","-","?","+",..: 17 17 17 17 17 17 17 17 17 17 ...
+##  $ CROPDMG   : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ CROPDMGEXP: Factor w/ 9 levels "","?","0","2",..: 1 1 1 1 1 1 1 1 1 1 ...
+</code></pre>
+
+<h4>Cleaning and tranforming the data</h4>
+
+<p>sier to aggregate and summarize on specific periods of time.</p>
+
+<pre><code class="r"><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">BGN_DATE</span> <span class="operator">=</span> <span class="identifier">strptime</span><span class="paren">(</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">BGN_DATE</span>, <span class="string">"%m/%d/%Y %H:%M:%S"</span><span class="paren">)</span>
+</code></pre>
+
+<ul>
+<li><code>EVTYPE</code> as a 985-level factor: it seems that there is a lot of redudancy (or mistakes) in these event type descriptions. According to <a href="http://www.ncdc.noaa.gov/stormevents/details.jsp?type=eventtype">NOAA's website</a>, from 1996 to present, only 48 event types are defined by NWS Directive 10-1605. We'd want to translate or map this gigantic list of event types into NWS's latest list.</li>
+</ul>
+
+<pre><code class="r"><span class="identifier">evtype</span> <span class="operator">&lt;-</span> <span class="identifier">read.csv</span><span class="paren">(</span><span class="string">"evtypes-directive-10-1605.csv"</span>, <span class="identifier">stringsAsFactors</span> <span class="operator">=</span> <span class="literal">FALSE</span><span class="paren">)</span>
+<span class="identifier">storm</span><span class="operator">$</span><span class="identifier">EVTYPE48</span> <span class="operator">=</span> <span class="identifier">factor</span><span class="paren">(</span><span class="identifier">evtype</span><span class="operator">$</span><span class="identifier">EVTYPE48</span><span class="paren">[</span><span class="identifier">match</span><span class="paren">(</span><span class="identifier">levels</span><span class="paren">(</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">[</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">]</span>, <span class="identifier">evtype</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">]</span><span class="paren">)</span>
+<span class="identifier">levels</span><span class="paren">(</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">EVTYPE48</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>##  [1] "Astronomical Low Tide"    "Avalanche"               
+##  [3] "Blizzard"                 "Coastal Flood"           
+##  [5] "Cold/Wind Chill"          "Debris Flow"             
+##  [7] "Dense Fog"                "Dense Smoke"             
+##  [9] "Drought"                  "Dust Devil"              
+## [11] "Dust Storm"               "Excessive Heat"          
+## [13] "Extreme Cold/Wind Chill"  "Flash Flood"             
+## [15] "Flood"                    "Freezing Fog"            
+## [17] "Frost/Freeze"             "Funnel Cloud"            
+## [19] "Hail"                     "Heat"                    
+## [21] "Heavy Rain"               "Heavy Snow"              
+## [23] "High Surf"                "High Wind"               
+## [25] "Hurricane (Typhoon)"      "Ice Storm"               
+## [27] "Lake-Effect Snow"         "Lakeshore Flood"         
+## [29] "Lightning"                "Marine Hail"             
+## [31] "Marine High Wind"         "Marine Strong Wind"      
+## [33] "Marine Thunderstorm Wind" "Rip Current"             
+## [35] "Seiche"                   "Sleet"                   
+## [37] "Storm Surge/Tide"         "Strong Wind"             
+## [39] "Thunderstorm Wind"        "Tornado"                 
+## [41] "Tropical Depression"      "Tropical Storm"          
+## [43] "Tsunami"                  "Volcanic Ash"            
+## [45] "Waterspout"               "Wildfire"                
+## [47] "Winter Storm"             "Winter Weather"
+</code></pre>
+
+<ul>
+<li><code>PROPDMG</code> and <code>CROPDMG</code> with multiple scales: damage magnitudes are expressed in a separate variable (<code>PROPDMGEXP</code> and <code>CROPDMGEXP</code>, respectively). We should normalize them (to the same scale), otherwise it would not be straighforward to compare damage values in different events and dates.</li>
+</ul>
+
+<p>We start by capitalizing all magnitude codes. It'll make the following steps easier.</p>
+
+<pre><code class="r"><span class="comment"># capitalize all 1-letter magnitude codes </span>
+<span class="identifier">storm</span><span class="operator">$</span><span class="identifier">PROPDMGEXP</span> <span class="operator">=</span> <span class="identifier">toupper</span><span class="paren">(</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">PROPDMGEXP</span><span class="paren">)</span>
+<span class="identifier">storm</span><span class="operator">$</span><span class="identifier">CROPDMGEXP</span> <span class="operator">=</span> <span class="identifier">toupper</span><span class="paren">(</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">CROPDMGEXP</span><span class="paren">)</span>
+</code></pre>
+
+<p>Before normalizing, we have to check whether there are invalid values in the magnitude variables.</p>
+
+<pre><code class="r"><span class="comment"># check invalid codes in property damages</span>
+<span class="identifier">valid.mag</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="string">""</span>, <span class="string">"H"</span>, <span class="string">"K"</span>, <span class="string">"M"</span>, <span class="string">"B"</span><span class="paren">)</span>
+<span class="identifier">with</span><span class="paren">(</span><span class="identifier">storm</span><span class="paren">[</span><span class="operator">!</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">PROPDMGEXP</span> <span class="operator">%in%</span> <span class="identifier">valid.mag</span>,<span class="paren">]</span>, 
+     <span class="identifier">table</span><span class="paren">(</span><span class="identifier">factor</span><span class="paren">(</span><span class="identifier">PROPDMGEXP</span><span class="paren">)</span>, <span class="identifier">format</span><span class="paren">(</span><span class="identifier">BGN_DATE</span>, <span class="string">"%Y"</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>##    
+##     1993 1994 1995 2011
+##   -    0    0    1    0
+##   ?    2    1    5    0
+##   +    0    1    4    0
+##   0    1   28  186    1
+##   1    0    0   25    0
+##   2    0    0   13    0
+##   3    0    0    4    0
+##   4    0    1    3    0
+##   5    0    2   26    0
+##   6    1    0    3    0
+##   7    0    0    5    0
+##   8    0    0    1    0
+</code></pre>
+
+<pre><code class="r"><span class="comment"># check invalid codes in crop damages</span>
+<span class="identifier">with</span><span class="paren">(</span><span class="identifier">storm</span><span class="paren">[</span><span class="operator">!</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">CROPDMGEXP</span> <span class="operator">%in%</span> <span class="identifier">valid.mag</span>,<span class="paren">]</span>, 
+     <span class="identifier">table</span><span class="paren">(</span><span class="identifier">factor</span><span class="paren">(</span><span class="identifier">CROPDMGEXP</span><span class="paren">)</span>, <span class="identifier">format</span><span class="paren">(</span><span class="identifier">BGN_DATE</span>, <span class="string">"%Y"</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>##    
+##     1993 1994 1995
+##   ?    2    0    5
+##   0    2    9    8
+##   2    0    0    1
+</code></pre>
+
+<p>It seems that, apart from one observation in 2011, all invalid magnitude codes are from the 1993-1995 period when, according to <a href="http://www.ncdc.noaa.gov/stormevents/details.jsp?type=eventtype">NOAA's website</a>, events were extracted from Unformatted Text files, a task known to be more prone to error. We'll leave them alone and consider all to be invalid. That means that their normalized value will be set to <code>NA</code>.</p>
+
+<p>We're going to create two more variables to store the normalized values.</p>
+
+<pre><code class="r"><span class="identifier">magnitude</span> <span class="operator">=</span> <span class="number">10</span><span class="operator">^</span><span class="identifier">c</span><span class="paren">(</span><span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">9</span><span class="paren">)</span>
+<span class="identifier">storm</span><span class="operator">$</span><span class="identifier">nPROPDMG</span> <span class="operator">=</span> <span class="identifier">storm</span><span class="operator">$</span><span class="identifier">PROPDMG</span> <span class="operator">*</span> <span class="identifier">magnitude</span><span class="paren">[</span><span class="identifier">match</span><span class="paren">(</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">PROPDMGEXP</span>, <span class="identifier">valid.mag</span><span class="paren">)</span><span class="paren">]</span>
+<span class="identifier">storm</span><span class="operator">$</span><span class="identifier">nCROPDMG</span> <span class="operator">=</span> <span class="identifier">storm</span><span class="operator">$</span><span class="identifier">CROPDMG</span> <span class="operator">*</span> <span class="identifier">magnitude</span><span class="paren">[</span><span class="identifier">match</span><span class="paren">(</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">CROPDMGEXP</span>, <span class="identifier">valid.mag</span><span class="paren">)</span><span class="paren">]</span>
+</code></pre>
+
+<p>Now we need to adjust them for inflation, using BLS Consumer Price Index data, mentioned in the <strong>Data files</strong> section.</p>
+
+<pre><code class="r"><span class="comment"># read CPI data</span>
+<span class="identifier">cpi</span> <span class="operator">=</span> <span class="identifier">read.csv</span><span class="paren">(</span><span class="string">"bls-cpi-1950-2013.csv"</span>, <span class="identifier">skip</span><span class="operator">=</span><span class="number">13</span>, <span class="identifier">colClasses</span><span class="operator">=</span><span class="identifier">c</span><span class="paren">(</span><span class="string">"integer"</span>, <span class="string">"numeric"</span>, <span class="string">"NULL"</span><span class="paren">)</span><span class="paren">)</span>
+<span class="comment"># get last index</span>
+<span class="identifier">last.cpi</span> <span class="operator">=</span> <span class="identifier">tail</span><span class="paren">(</span><span class="identifier">cpi</span>, <span class="number">1</span><span class="paren">)</span><span class="operator">$</span><span class="identifier">Annual</span>
+<span class="comment"># calculate each row's inflation index</span>
+<span class="identifier">adj.index</span> <span class="operator">=</span> <span class="identifier">last.cpi</span><span class="operator">/</span><span class="identifier">cpi</span><span class="paren">[</span><span class="identifier">match</span><span class="paren">(</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">BGN_DATE</span><span class="operator">$</span><span class="identifier">year</span><span class="operator">+</span><span class="number">1900</span>, <span class="identifier">cpi</span><span class="operator">$</span><span class="identifier">Year</span><span class="paren">)</span>,<span class="string">"Annual"</span><span class="paren">]</span>
+<span class="comment"># apply them</span>
+<span class="identifier">storm</span><span class="operator">$</span><span class="identifier">nPROPDMG</span> <span class="operator">=</span> <span class="identifier">floor</span><span class="paren">(</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">nPROPDMG</span> <span class="operator">*</span> <span class="identifier">adj.index</span><span class="paren">)</span>
+<span class="identifier">storm</span><span class="operator">$</span><span class="identifier">nCROPDMG</span> <span class="operator">=</span> <span class="identifier">floor</span><span class="paren">(</span><span class="identifier">storm</span><span class="operator">$</span><span class="identifier">nCROPDMG</span> <span class="operator">*</span> <span class="identifier">adj.index</span><span class="paren">)</span>
+</code></pre>
+
+<p>One last step would be to generate an aggregate dataset, with annual totals. That will be the dataset used in our analysis.</p>
+
+<pre><code class="r"><span class="identifier">storm.agg</span> <span class="operator">=</span> <span class="identifier">aggregate</span><span class="paren">(</span><span class="identifier">cbind</span><span class="paren">(</span><span class="identifier">FATALITIES</span>, <span class="identifier">INJURIES</span>, <span class="identifier">nPROPDMG</span>, <span class="identifier">nCROPDMG</span><span class="paren">)</span> <span class="operator">~</span> 
+                        <span class="identifier">BGN_DATE</span><span class="operator">$</span><span class="identifier">year</span> <span class="operator">+</span> <span class="identifier">EVTYPE48</span> <span class="operator">+</span> <span class="identifier">STATE</span>, <span class="identifier">data</span><span class="operator">=</span><span class="identifier">storm</span>, <span class="identifier">sum</span><span class="paren">)</span>
+<span class="identifier">names</span><span class="paren">(</span><span class="identifier">storm.agg</span><span class="paren">)</span><span class="paren">[</span><span class="number">1</span><span class="paren">]</span> <span class="operator">=</span> <span class="string">"YEAR"</span>
+<span class="identifier">storm.agg</span><span class="operator">$</span><span class="identifier">YEAR</span> <span class="operator">=</span> <span class="identifier">storm.agg</span><span class="operator">$</span><span class="identifier">YEAR</span> <span class="operator">+</span> <span class="number">1900</span>
+</code></pre>
+
+<h2>Analysis</h2>
+
+<p>As mentioned in the NOAA's website, until 1992, only tornado, thunderstorm wind and hail events found their way into the database. Let's see what we have in our dataset.</p>
+
+<pre><code class="r"><span class="identifier">pre1993</span> <span class="operator">=</span> <span class="identifier">aggregate</span><span class="paren">(</span><span class="identifier">cbind</span><span class="paren">(</span><span class="identifier">FATALITIES</span>, <span class="identifier">INJURIES</span>, <span class="identifier">nPROPDMG</span>, <span class="identifier">nCROPDMG</span><span class="paren">)</span> <span class="operator">~</span> <span class="identifier">EVTYPE48</span>, 
+                    <span class="identifier">data</span><span class="operator">=</span><span class="identifier">storm.agg</span><span class="paren">[</span><span class="identifier">storm.agg</span><span class="operator">$</span><span class="identifier">YEAR</span><span class="operator">&lt;</span><span class="number">1993</span>,<span class="paren">]</span>, <span class="identifier">sum</span><span class="paren">)</span>
+<span class="identifier">pre1993</span>
+</code></pre>
+
+<pre><code>##            EVTYPE48 FATALITIES INJURIES  nPROPDMG nCROPDMG
+## 1              Hail          5      401 0.000e+00        0
+## 2 Thunderstorm Wind        263     3326 0.000e+00        0
+## 3           Tornado       4012    68036 1.147e+11        0
+</code></pre>
+
+<p>As we can see, until 1992, property damages related to 'Tornado' events amount to  billion. This is more than 19% of total property damages of all event types in the whole period. Tornado pre-1993 data also represents 26.5% of all fatalities and 48% of all injuries, as we show below.</p>
+
+<pre><code class="r"><span class="identifier">metrics</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="string">"FATALITIES"</span>, <span class="string">"INJURIES"</span>, <span class="string">"nPROPDMG"</span>, <span class="string">"nCROPDMG"</span><span class="paren">)</span>
+<span class="identifier">pre1993</span><span class="paren">[</span><span class="identifier">pre1993</span><span class="operator">$</span><span class="identifier">EVTYPE48</span><span class="operator">==</span><span class="string">"Tornado"</span>, <span class="identifier">metrics</span><span class="paren">]</span><span class="operator">/</span><span class="identifier">colSums</span><span class="paren">(</span><span class="identifier">storm.agg</span><span class="paren">[</span><span class="identifier">metrics</span><span class="paren">]</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>##   FATALITIES INJURIES nPROPDMG nCROPDMG
+## 3     0.2652   0.4844   0.1909        0
+</code></pre>
+
+<p>Any attempt of making an unbiased analysis should leave pre-1993 data out and that's what we're going to do.</p>
+
+<pre><code class="r"><span class="identifier">storm.agg.93</span> <span class="operator">=</span> <span class="identifier">subset</span><span class="paren">(</span><span class="identifier">storm.agg</span>, <span class="identifier">YEAR</span><span class="operator">&gt;=</span><span class="number">1993</span><span class="paren">)</span>
+</code></pre>
+
+<h3>Events harmful to population health</h3>
+
+<p>Now, we start to analyze the type of events most harmful to population health, according to 1993 and forward storm data.</p>
+
+<pre><code class="r"><span class="identifier">harmful</span> <span class="operator">=</span> <span class="identifier">aggregate</span><span class="paren">(</span><span class="identifier">cbind</span><span class="paren">(</span><span class="identifier">FATALITIES</span>, <span class="identifier">INJURIES</span><span class="paren">)</span> <span class="operator">~</span> <span class="identifier">EVTYPE48</span>, <span class="identifier">data</span><span class="operator">=</span><span class="identifier">storm.agg.93</span>, <span class="identifier">sum</span><span class="paren">)</span>
+<span class="comment"># ordering by FATALITIES and INJURIES</span>
+<span class="identifier">most.harmful.5</span> <span class="operator">=</span> <span class="identifier">lapply</span><span class="paren">(</span><span class="identifier">c</span><span class="paren">(</span><span class="string">"FATALITIES"</span>, <span class="string">"INJURIES"</span><span class="paren">)</span>,
+                        <span class="keyword">function</span><span class="paren">(</span><span class="identifier">n</span><span class="paren">)</span> <span class="identifier">harmful</span><span class="paren">[</span>
+                          <span class="identifier">order</span><span class="paren">(</span><span class="identifier">harmful</span><span class="paren">[</span><span class="identifier">n</span><span class="paren">]</span>, <span class="identifier">decreasing</span><span class="operator">=</span><span class="literal">TRUE</span><span class="paren">)</span><span class="paren">[</span><span class="number">1</span><span class="operator">:</span><span class="number">5</span><span class="paren">]</span>,
+                          <span class="identifier">c</span><span class="paren">(</span><span class="string">"EVTYPE48"</span>,<span class="identifier">n</span><span class="paren">)</span><span class="paren">]</span><span class="paren">)</span>
+<span class="identifier">most.harmful.5</span>
+</code></pre>
+
+<pre><code>## [[1]]
+##          EVTYPE48 FATALITIES
+## 12 Excessive Heat       2016
+## 40        Tornado       1643
+## 20           Heat       1161
+## 14    Flash Flood       1065
+## 29      Lightning        817
+## 
+## [[2]]
+##             EVTYPE48 INJURIES
+## 40           Tornado    23303
+## 15             Flood     6794
+## 12    Excessive Heat     6680
+## 39 Thunderstorm Wind     6231
+## 29         Lightning     5232
+</code></pre>
+
+<p>We can see that, in the period including and after 1993, 'Tornado' was the event that caused more injuries, as most of us would pehaps expect.</p>
+
+<p>What came as a surprise is that 'Excessive Heat' caused more fatalities in the same period (followed by 'Tornado' events). If we add to this number those 'Heat'-caused fatalities (3rd line of first list item), we'll have more than 3,100 heat-related fatalities, almost twice as much as 'Tornado' fatalities.</p>
+
+<p>Let's investigate this a little further.</p>
+
+<pre><code class="r"><span class="identifier">heat.related</span> <span class="operator">=</span> <span class="identifier">storm.agg.93</span><span class="operator">$</span><span class="identifier">EVTYPE48</span><span class="operator">==</span><span class="string">"Excessive Heat"</span> <span class="operator">|</span> 
+  <span class="identifier">storm.agg.93</span><span class="operator">$</span><span class="identifier">EVTYPE48</span><span class="operator">==</span><span class="string">"Heat"</span>
+
+<span class="keyword">library</span><span class="paren">(</span><span class="identifier">ggplot2</span><span class="paren">)</span>
+<span class="keyword">library</span><span class="paren">(</span><span class="identifier">grid</span><span class="paren">)</span>
+<span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">storm.agg.93</span><span class="paren">[</span><span class="identifier">heat.related</span>,<span class="paren">]</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span><span class="operator">=</span><span class="identifier">as.factor</span><span class="paren">(</span><span class="identifier">YEAR</span><span class="paren">)</span>, <span class="identifier">y</span><span class="operator">=</span><span class="identifier">FATALITIES</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span> 
+  <span class="identifier">geom_bar</span><span class="paren">(</span><span class="identifier">stat</span><span class="operator">=</span><span class="string">"identity"</span>, <span class="identifier">fill</span><span class="operator">=</span><span class="string">"darkolivegreen3"</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">labs</span><span class="paren">(</span><span class="identifier">title</span><span class="operator">=</span> <span class="string">"Heat-related fatalities (1993-2011)"</span>, <span class="identifier">x</span><span class="operator">=</span><span class="string">"Year"</span>,
+     <span class="identifier">y</span><span class="operator">=</span><span class="identifier">expression</span><span class="paren">(</span><span class="string">"Fatalities"</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">guides</span><span class="paren">(</span><span class="identifier">fill</span><span class="operator">=</span><span class="literal">FALSE</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">theme_minimal</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span><span class="operator">=</span><span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span><span class="operator">=</span><span class="number">18</span>, <span class="identifier">face</span><span class="operator">=</span><span class="string">"bold"</span><span class="paren">)</span>,
+        <span class="identifier">panel.grid.major.x</span> <span class="operator">=</span> <span class="identifier">element_blank</span><span class="paren">(</span><span class="paren">)</span>,
+        <span class="identifier">panel.grid.minor.x</span> <span class="operator">=</span> <span class="identifier">element_blank</span><span class="paren">(</span><span class="paren">)</span><span class="paren">)</span>
+</code></pre>
+
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAogAAAH4CAMAAAD+XezUAAAAjVBMVEUAAAAAADoAAGYAOmYAOpAAZrY6AAA6ADo6AGY6OmY6OpA6ZrY6kLY6kNtmAABmADpmAGZmOgBmOjpmOpBmZmZmtv+QOgCQOjqQOmaQZpCQkLaQtpCQ2/+izVq2ZgC2Zjq2tma2/7a2///bkDrbtmbb/7bb/9vb///l5eX6+vr/tmb/25D//7b//9v///9oQ2xSAAAACXBIWXMAAAsSAAALEgHS3X78AAARsElEQVR4nO2cDXubyBVGSWptt2lJsm3wpq2rbU23TrDF//95BQaYGQYQEiC9kHMePxj7Mne+jgYQtqIcQIDo3g0AKEFEkAARQQJEBAkQESRARJAAEUECRAQJEBEkQESQABFBAkQECRARJEBEkAARQQJEBAkQESRARJBgHyIeo4eX4tvpMToMHZK9fz5b/szBadT++hhFUTxcoMpnklaRbv4ubx9N+def3j2Z71Fdom+vrrJoQpSY0lHbsiZDs9dkludHEdGRaLj8mYPtr60E/QWsiCZyTsTUtLswqtKoSl8VtHulh5FTTVpFyleDG2ky2L2j94LRBRGd8mcOdkVs1p3+AjbfeL01RbuT3FhX5q26UegVO3tFyvfPZq+i8OxQhovsZWXFj7GTwdnLzrwGVNijiMW35sSZmlWj+k0zI8Wk/eWxnCV7nCnfPdjJU646cSvVsV6CugXqn+2K+L86YvI7+Y7ekppViavSpTxFZYnJYfcq05wXWlYVL18QxsG0rb/Sz+4VYWfp1mWHIppTlVWrmPyuiNUPznHHdhqdg524OUNGHRG7BezZsldEm88UsCY2r4ND5oiYmiUwcVbVLOpIlRbHm2My88KoMzh7Y9fNSuxFxIbqfGVmPTargZkJ5xRZXz05xzVrjnewEzenwCzyT83dAs7PfdeITr7KneLw+pVRu5ImeeatiI1kx/p0e4w613tVikbE4pg2g7N39vpUhP2JaCbGnKtys5i1QlRUl1e5d9yx52AnXl+bHcNrxG72+uc+Ef187jJVX+C1eRu/qtNuvZebM7t3wXmqLjAcEd2WtXuTrlLvzy5FbM+j9Sm1EaI6KT/8bubdPa5ypnOwE28d8kXsFHB+HhCxyVefmpuVqk7f5m0SFft2r6RaVE0n6kvOJD8rYvfGSpS9iGivEZvrOSNQlJhTYiiic1wrinuwn6dHxG4B5+c+Ed366uvR2sRAxOoq4N+N3PVeE29ErD3MnWvEHBHvjCuinVYzO/5VnLciJm757sFOvP/U3C3g/Dxyam6xb/mFIpak7YqZeleCtYjmvJw3J3Z7JRKKyKn5ZrgimjuL6kKwusvMovBmJTYHN8c1K5Z3sBM3k969WekWcH4euFlx2hU7Teq5RjyYX3p7zf2OIW3vXJz3EblGvDN9b980K6A5kWWR+/ZNNWn2uGYu/YOdeOftm/au2Svwu/3ZimhSuW/fGMcrapPsOyztmy/Nidvu1U1wFunm6tF75hKKyF3zDel5Q7v6RfU+dNa8ed1dgOxxrSjewTZexQ7dm5VuAfuzFdFEnDe0Tb7Ulcqehe0q1txW270ye/CEr1lBe5752PcRN/GMbx8ibpw1L+N4sgKTqZ81rwLPmmE66XqP4fjrG5jOen81yN8jAlwCIoIEiAgSICJIgIggASKCBIgIEiAiSICIIAEiggSICBIgIkiAiCABIoIEiAgSICJIgIggASKCBIgIEtxBxH+NcPvWgAaICBIgIkiAiCABIoIEiAgSICJIgIggASKCBIgIEiAiSICIIAEiggSICBJcLuL3uYyJODs5bIXZIs6GFRFCEBEkQESQABFBAkQECRARJEBEkAARQQJEBAkQESRARJAAEUECRAQJEBEkQESQABFBAkQECRARJEBEkAARQQJEBAkQESRARJAAEUECRAQJEBEkQESQABFBAkQECRARJEBEkAARQQJEBAkQESRARJAAEUECRAQJEBEkQESQABFBAkQECRARJEBEkAARQQJEBAkQESRARJAAEUECRAQJEBEkGBTx9BhFcZ4fo3dPzXYhEBFCBkVMD4V/Sfbw0n4tVSUiQsiwiOVyGBfbt8/PZlseXfBtLmMizk4OW2GqiOWp+UucJvnp67PZLuU+KyKEjN6spN0VcREQEUIGRcwO+dunJ64R4TYMr4jHKEq4a4YbwfuIIAEiggSICBIgIkiAiCABIoIEiAgSICJIgIggASKCBIgIEiAiSICIIAEiggSICBIgIkiAiCABIoIEiAgSICJIgIggASKCBIgIEiAiSICIIAEiggSICBIgIkiAiCABIoIEiAgSICJIgIggASKCBIgIEiAiSICIIAEiggSICBIgIkiAiCABIoIEiAgSICJIgIggASKCBIgIEiAiSICIIMHlIn6fy5iIs5PDVpgt4mxYESEEEUECRAQJEBEkQESQABFBAkQECRARJEBEkAARQQJEBAkQESRARJAAEUECRAQJEBEkQESQABFBAkQECRARJEBEkAARQQJEBAkQESRARJAAEUECRAQJEBEkQESQABFBAkQECRARJEBEkAARQQJEBAkQESRARJAAEUECRAQJEBEkQESQABFBAkQECRARJEBEkAARQQJEBAkQESRARJAAEUGCjojpw0saRcmqVSIihPgivn16Kr5ef34u9gshD3l+jN49NduFQEQI6Yj4+blYEysRs9LCJHt4ab+WqhIRIaR7ai6Wvqw6NadfyhUxjSs5q215dMG3uYyJODs5bIVxES3HYkVMkzTJT1+fzXYp91kRIWRQxEK+PIs7K+IiICKEdEQ8PUYPv38qb0yyakXkGhFugy/i6TF+/VBLV9w1x9w1w40I7poLERc8DfeBiBDStyKmy52G+0BECAmvEaNoXQ8REXrgWTNIgIgggSvi2+f/fCyfnUTvuVmBG8OKCBIEb9+029VARAjxTs3mxLz2bTMiQkjfirgyiAghXCOCBNw1gwSsiCABIoIEvXfNnJrh1rAiggSICBIE/8XHqRnuQfAP9tkhTw+rVomIEBI8WTFfa1aJiBDS+VeBX5+KL/ORI6uBiBDSuUYsHMyq/95bEUSEEO6aQQL+HhEk4O8RQQL+HhEk4BoRJODJCkjAkxWQgCcrIMEP9WSFV4AuP9STFUTU5Ye6a0ZEXRARESXw/530Bm9nIyL00RXx9cO6n9KZIyL0gYiIKAEiIqIEP9T/NSOiLtw1I6IEiIiIEiAiIkqAiIgoASIiogSIiIgSICIiSoCIiCgBIiKiBJeL+H0uYyLOTn5tzetWDCGzRZwNKyKEICIiSoCIiCgBIiKiBIiIiBIgIiJKgIiIKAEiIqIEiIiIEiAiIkqAiIgoASIiogSIiIgSICIiSoCIiCgBIiKiBIiIiBIgIiJKgIiIKAEiIqIEiIiIEiAiIkqAiIgoASIiogSIiIgSICIiSoCIiCgBIiKiBIiIiBIgIiJKgIiIKAEiIqIEiIiIEiAiIkqAiIgoASIiogSIiIgSICIiSoCIiCgBIiKiBIiIiBIgIiJKgIiIKAEiIqIEiIiIEiAiIkqAiIgoASIiogSIiIgSICIiSoCIiCjBsIjHKErK7bunZrsQiAghgyJmh/zt83P28NJ+LVUlIkLI2Km5EDGN7bY8uuDbXMZEnJ382prXrRhCpot4jOI8TfLT12ezXUD7ClZECBm9WUnjzoq4CIgIIcPXiHEpIteIcBtG75oP3DXDjeB9RESUABERUQJEREQJEBERJUBERJQAERFRAkRERAkQERElQERElAAREVECRERECRARESVAxK2LuJNOIeL25sxnJ51CxO3Nmc9OOoWI25szn510ChG3N2c+O+kUIm5vznx20ilE3N6c+eykU4i4vTnz2UmnEHF7c+azk04h4vbmzGcnnULE7c2Zz046hYjbmzOfnXQKEbc3Zz476RQibm/OfHbSKUTc3pz57KRTiLi9OfPZSacQcXtz5rOTTiHi9ubMZyedQsTtzZnPTjqFiNubM5+ddAoRtzdnPjvpFCJub858dtIpRNzenPnspFOIuL0589lJpxBxe3Pms5NOIeL25sxnJ51CxO3Nmc9OOoWI25szn510amcijqfeyZz57KRTiLi9OfPZSacQcXtz5rOTTiHi1IqvTs2F7xQQcWrFV6dGxCkg4tSKr06NiFNARFvxnMKyndoKiGgrnlNYtlNbARFtxXMKy3ZqK1wu4ve5jM3ZirnPRmcVlu2ULLNFnM3YnK2Y+2yUFfGeIKKteE5h2U5tBUS0Fc8pLNuprYCItuI5hWU7tRUQ0VY8p7Bsp7YCItqK5xSW7dRWQERb8ZzCsp3aCohoK55TWLZTWwERbcVzCst2aisgoq14TmHZTm0FRLQVzyks26mtgIi24jmFZTu1FRDRVjynsGyntgIi2ornFJbt1FZARFvxnMKyndoKiGgrnlNYtlNbARFtxXMKy3ZqKyCirXhOYdlO3Y0LRwQRbcVzCst26m5cOCKIaCueU1i2U3fjwhFBRFvxnMKynbobF44IItqK5xSW7dTduHBEENFWPKewbKfuxoUjgoi24jmFZTu1IouOyNZEPFN4ThQRb9UuRByveKXUiDilYYhoK14pNSJOaRgi2opXSo2IUxqGiLbilVIj4pSGIaKteKXUiDilYYhoK14pNSJOaRgi2opXSo2IUxqGiLbilVIj4pSGIaKteKXUiDilYYhoK14pNSJOaRgi2opXSo2IUxqGiLbilVIj4pSGrSLioi2cnBoRL2/XrFbPqrkLItqKV0qNiFNyI6KteKXUiDglt56I9yk8q9lz27XWcKq2CxFHo/ubcNXBRsTRKCLesnAXRGyjiHjLwl0QsY0i4i0Ld0HENoqItyzcBRHbKCLesnAXRGyjiHjLwl0QsY0i4i0Ld0HENoqItyzc5UoRVbs3J7rLTkm263oRj9G7J0S8R7sQ0SV7eCm+EPEO7UJElzTO3z4/l0cXfANYgKtETPLT1+cpRwJcx2UrIsBKXHmNCLAsV941AyzLHf6LDyAEEUECRAQJEBEkQESQABFBAkQECRARJEBEkAARQQJEBAkQESRARJAAEUGCJUQ8k2M8vGJh2nXDwrNSTzlgArscmx+wXYi4UmHadcPCiHiX1Lts1+ZFBJgNIoIEiAgSICJIgIggwfUilp/9cHqMorje5scoSkbC1QdGjBV2/nU6CKdRdBiMpuVH8sQjqd1/yu6G29YVlPsPL3UBdzsYdj4BI4zWvxlObcerL7Udr/7CbcN6ws54hVFvvMb73N+p3rJmKAbHqx6pwU8MuVrELHr/nKdFb4+J2WYHt5YgXP4qHoyefn06k7tKMZQ6P/39ZbCs9zEVQTh1UmdOAfcrHwqbdIOFx1O749WT2hmvMOqN16U1++M12ucwOjReZigGx6seKWe8Olwr4ukf5ccyla/ZY2y2ubc8hOHXD/+NB6Nvf/3JLnlhOP3ivML7av7taTD6+qGal8HUTYqaNDGf9ONu86GwSTcUNb8ZiY6ldscrjHrj1dPsL5EXDmr+7Wm4sDdgfSPSO17tyPZ3yoS74+Vw/am5Slwsvl9isy2X5Xg4XDQmiwejWblOJYPh48Gd0rBmd+CCaBa5n9vTDTcpaopM5rPP3G0+FM7PRL2GBVFvvLphf7y60c54dcP+eIU1e6IFYX/AOtGh8TJDMThezUitJGJJGne3vWH/Qq6vcDZSOHHDYWH3BR6UPeSvPz8Phv1mVzM4vCJ2w/7AhtGjM+Fh1BuvoGZvvPoKZyOFvfEKC3sLYlDYG7DxZttoLeLQeK0sYnmd8+mp3saBiG44D0wLCifD4WBF9FK//a2z5LnRztj0pDatK2OPZR2D14hh2B3YMGp+M5jaHa++1Ha8Bgonw2FnvHpSu+MVht0B603dO171yA6N19orornza7eHkXC45HUKxyOFUzccRF//PNKu8lySjKR2bl6PZhUaumvuCTsDG0aPzqLWm9qOV19qO179heORws549UTd8QrD7oD119wbbUZ2YLzWExFgQRARJEBEkAARQQJEBAkQcRlOj+Ud8PFw9kDoBxEX4vWPT94b53AZiLgUxWpYPoN9+1g913/9qXy77fVPvww95AcfRFyKt0///PBS/UFAah4+FOvj60/J+YJQgoiLkZZPHKonjuYBWfmHLJyrp4KIi1FZV5yZo+ZJ2HtEnA4iLoYRsV4NPybVqRkRp4KIi2GsK64Rs4eXcr+4j0bEySDiYhjrinNz/ecvf/glQcTJICJIgIggASKCBIgIEiAiSICIIAEiggSICBIgIkiAiCDB/wEZ0Jb9g+5LaQAAAABJRU5ErkJggg==" alt="plot of chunk heatrelated"> </p>
+
+<p>Look at the barplot above. Why is the number of 1995 heat-related fatalities so high? Let's check which states had more fatalities that year.</p>
+
+<pre><code class="r"><span class="identifier">states.heat</span> <span class="operator">=</span> <span class="identifier">aggregate</span><span class="paren">(</span><span class="identifier">FATALITIES</span> <span class="operator">~</span> <span class="identifier">STATE</span>, <span class="identifier">data</span><span class="operator">=</span><span class="identifier">subset</span><span class="paren">(</span><span class="identifier">storm.agg.93</span>, <span class="identifier">heat.related</span> <span class="operator">&amp;</span> <span class="identifier">YEAR</span><span class="operator">==</span><span class="number">1995</span><span class="paren">)</span>, <span class="identifier">sum</span><span class="paren">)</span>
+<span class="identifier">states.heat</span> <span class="operator">=</span> <span class="identifier">states.heat</span><span class="paren">[</span><span class="identifier">order</span><span class="paren">(</span><span class="identifier">states.heat</span><span class="operator">$</span><span class="identifier">FATALITIES</span>, <span class="identifier">decreasing</span><span class="operator">=</span><span class="literal">TRUE</span><span class="paren">)</span>,<span class="paren">]</span>
+<span class="identifier">head</span><span class="paren">(</span><span class="identifier">states.heat</span>, <span class="number">5</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>##    STATE FATALITIES
+## 12    IL        626
+## 29    PA        198
+## 38    WI         67
+## 21    MO         34
+## 24    NJ         20
+</code></pre>
+
+<p>We can see that Illinois was the state with the greatest number of heat-related fatalities in 1995. Searching on the internet, we find that it corresponds to the so-called “1995 Chicago heat wave”. According to <a href="http://en.wikipedia.org/wiki/1995_Chicago_heat_wave">Wikipedia</a>, this heat wave “led to approximately 750 heat-related deaths in Chicago over a period of five days. Most of the victims of the heatwave were elderly poor residents of the inner city, who could not afford air conditioning and did not open windows or sleep outside for fear of crime.”</p>
+
+<p>Getting back to our list, we'll have flood-like events, thunderstorm winds and lightning events, besides heat and tornadoes, as the most harmful events to population health.</p>
+
+<pre><code class="r"><span class="identifier">most.harmful.5</span>
+</code></pre>
+
+<pre><code>## [[1]]
+##          EVTYPE48 FATALITIES
+## 12 Excessive Heat       2016
+## 40        Tornado       1643
+## 20           Heat       1161
+## 14    Flash Flood       1065
+## 29      Lightning        817
+## 
+## [[2]]
+##             EVTYPE48 INJURIES
+## 40           Tornado    23303
+## 15             Flood     6794
+## 12    Excessive Heat     6680
+## 39 Thunderstorm Wind     6231
+## 29         Lightning     5232
+</code></pre>
+
+<h3>Events with the greatest economic consequences</h3>
+
+<p>Applying a similar approach to find the events that caused the most damages to property and crop in the 1993-2011 period, we'll find these results.</p>
+
+<pre><code class="r"><span class="identifier">econ.cons</span> <span class="operator">=</span> <span class="identifier">aggregate</span><span class="paren">(</span><span class="identifier">cbind</span><span class="paren">(</span><span class="identifier">nPROPDMG</span>, <span class="identifier">nCROPDMG</span><span class="paren">)</span> <span class="operator">~</span> <span class="identifier">EVTYPE48</span>, <span class="identifier">data</span><span class="operator">=</span><span class="identifier">storm.agg.93</span>, <span class="identifier">sum</span><span class="paren">)</span>
+<span class="comment"># ordering by Property and Crop Damages (inflation adjusted)</span>
+<span class="identifier">econ.cons.5</span> <span class="operator">=</span> <span class="identifier">lapply</span><span class="paren">(</span><span class="identifier">c</span><span class="paren">(</span><span class="string">"nPROPDMG"</span>, <span class="string">"nCROPDMG"</span><span class="paren">)</span>,
+                        <span class="keyword">function</span><span class="paren">(</span><span class="identifier">n</span><span class="paren">)</span> <span class="identifier">econ.cons</span><span class="paren">[</span>
+                          <span class="identifier">order</span><span class="paren">(</span><span class="identifier">econ.cons</span><span class="paren">[</span><span class="identifier">n</span><span class="paren">]</span>, <span class="identifier">decreasing</span><span class="operator">=</span><span class="literal">TRUE</span><span class="paren">)</span><span class="paren">[</span><span class="number">1</span><span class="operator">:</span><span class="number">5</span><span class="paren">]</span>,
+                          <span class="identifier">c</span><span class="paren">(</span><span class="string">"EVTYPE48"</span>,<span class="identifier">n</span><span class="paren">)</span><span class="paren">]</span><span class="paren">)</span>
+<span class="identifier">econ.cons.5</span>
+</code></pre>
+
+<pre><code>## [[1]]
+##               EVTYPE48  nPROPDMG
+## 15               Flood 1.780e+11
+## 25 Hurricane (Typhoon) 1.058e+11
+## 37    Storm Surge/Tide 5.678e+10
+## 40             Tornado 3.417e+10
+## 14         Flash Flood 2.149e+10
+## 
+## [[2]]
+##               EVTYPE48  nCROPDMG
+## 9              Drought 1.841e+10
+## 15               Flood 1.534e+10
+## 26           Ice Storm 7.891e+09
+## 25 Hurricane (Typhoon) 7.186e+09
+## 19                Hail 3.959e+09
+</code></pre>
+
+<p>'Flood' and 'Drought' come up as the most dangerous weather events to properties and crop, respectively, with total damages worth around $178 billion in the former's case and arount $18.4 in the latter's, inflation adjusted. 'Flood' have its evil share of $15.3 billion in crop damages too.</p>
+
+<p>Alongside them, concerning property damages, we have 'Hurricane (Typhoon)' ($105 billion), 'Storm Surge/Tide' ($56 billion), 'Tornado' ($34 billion) and 'Flash Flood' ($21 billion); crop damages around $7.8 billion caused by 'Ice Storm', $7.1 billion caused again by 'Hurricane (Typhoon)' and $3.9 billion by 'Hail' complete this list of the most economically harmful weather events.</p>
+
+<p>Lookint at the plot of property damage caused by top-5 events, we can't help but notice some prominent points.</p>
+
+<pre><code class="r"><span class="identifier">propdmg.top5</span> <span class="operator">=</span> <span class="identifier">as.character</span><span class="paren">(</span><span class="identifier">econ.cons.5</span><span class="paren">[</span><span class="paren">[</span><span class="number">1</span><span class="paren">]</span><span class="paren">]</span><span class="operator">$</span><span class="identifier">EVTYPE48</span><span class="paren">)</span>
+<span class="identifier">propdmg.agg</span> <span class="operator">=</span> <span class="identifier">aggregate</span><span class="paren">(</span><span class="identifier">nPROPDMG</span> <span class="operator">~</span> <span class="identifier">EVTYPE48</span> <span class="operator">+</span> <span class="identifier">YEAR</span>, <span class="identifier">data</span><span class="operator">=</span><span class="identifier">subset</span><span class="paren">(</span><span class="identifier">storm.agg.93</span>, <span class="identifier">EVTYPE48</span> <span class="operator">%in%</span> <span class="identifier">propdmg.top5</span><span class="paren">)</span>, <span class="identifier">sum</span><span class="paren">)</span>
+<span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">propdmg.agg</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span><span class="operator">=</span><span class="identifier">as.factor</span><span class="paren">(</span><span class="identifier">YEAR</span><span class="paren">)</span>, <span class="identifier">y</span><span class="operator">=</span><span class="identifier">nPROPDMG</span><span class="operator">/</span><span class="number">10</span><span class="operator">^</span><span class="number">9</span>, <span class="identifier">group</span><span class="operator">=</span><span class="identifier">EVTYPE48</span>, <span class="identifier">color</span><span class="operator">=</span><span class="identifier">EVTYPE48</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span> 
+  <span class="identifier">geom_line</span><span class="paren">(</span><span class="identifier">size</span><span class="operator">=</span><span class="number">1</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">geom_point</span><span class="paren">(</span><span class="identifier">size</span><span class="operator">=</span><span class="number">4</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">labs</span><span class="paren">(</span><span class="identifier">title</span><span class="operator">=</span><span class="string">"Property damage - 5 most destructive event types"</span>, <span class="identifier">x</span><span class="operator">=</span><span class="string">"Year"</span>,
+       <span class="identifier">y</span><span class="operator">=</span><span class="string">"Property damages ($ billion)"</span>, <span class="identifier">color</span><span class="operator">=</span><span class="string">"Event type"</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">guides</span><span class="paren">(</span><span class="identifier">fill</span><span class="operator">=</span><span class="literal">FALSE</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">theme_minimal</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span><span class="operator">=</span><span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span><span class="operator">=</span><span class="number">16</span>, <span class="identifier">face</span><span class="operator">=</span><span class="string">"bold"</span><span class="paren">)</span>,
+        <span class="identifier">panel.grid.major.x</span> <span class="operator">=</span> <span class="identifier">element_blank</span><span class="paren">(</span><span class="paren">)</span>,
+        <span class="identifier">panel.grid.minor.x</span> <span class="operator">=</span> <span class="identifier">element_blank</span><span class="paren">(</span><span class="paren">)</span>,
+        <span class="identifier">legend.position</span><span class="operator">=</span><span class="identifier">c</span><span class="paren">(</span><span class="number">0</span>,<span class="number">0.95</span><span class="paren">)</span>,
+        <span class="identifier">legend.justification</span><span class="operator">=</span><span class="identifier">c</span><span class="paren">(</span><span class="number">0</span>,<span class="number">1</span><span class="paren">)</span>,
+        <span class="identifier">legend.direction</span><span class="operator">=</span><span class="string">"vertical"</span>,
+        <span class="identifier">legend.key.height</span><span class="operator">=</span><span class="identifier">unit</span><span class="paren">(</span><span class="number">5</span>, <span class="string">"mm"</span><span class="paren">)</span><span class="paren">)</span>
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk plot_propdmg"> 
+The spikes in year 2005 are most likely to represent the economic losses of Hurricane Katrina, supposedly the <a href="http://en.wikipedia.org/wiki/Hurricane_Katrina">costliest natural disaster</a> in the US history. So, it seems odd that the spike in 2006 is higher than that. We decided to investigate this.</p>
+
+<p>Looking at the top states affected by flood in 2006, we get that California has the higher property damage annual total.</p>
+
+<pre><code class="r"><span class="identifier">states.flood</span> <span class="operator">=</span> <span class="identifier">aggregate</span><span class="paren">(</span><span class="identifier">nPROPDMG</span> <span class="operator">~</span> <span class="identifier">STATE</span>, <span class="identifier">data</span><span class="operator">=</span><span class="identifier">subset</span><span class="paren">(</span><span class="identifier">storm.agg.93</span>, <span class="identifier">EVTYPE48</span><span class="operator">==</span><span class="string">'Flood'</span> <span class="operator">&amp;</span> <span class="identifier">YEAR</span><span class="operator">==</span><span class="number">2006</span><span class="paren">)</span>, <span class="identifier">sum</span><span class="paren">)</span>
+<span class="identifier">states.flood</span> <span class="operator">=</span> <span class="identifier">states.flood</span><span class="paren">[</span><span class="identifier">order</span><span class="paren">(</span><span class="identifier">states.flood</span><span class="operator">$</span><span class="identifier">nPROPDMG</span>, <span class="identifier">decreasing</span><span class="operator">=</span><span class="literal">TRUE</span><span class="paren">)</span>,<span class="paren">]</span>
+<span class="identifier">head</span><span class="paren">(</span><span class="identifier">states.flood</span>, <span class="number">5</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>##    STATE  nPROPDMG
+## 5     CA 1.332e+11
+## 18    LA 7.157e+08
+## 34    NY 1.840e+08
+## 38    PA 1.609e+08
+## 1     AK 7.074e+07
+</code></pre>
+
+<p>Looking into the (almost) raw data, we see this suspect event, related to the period of storms and flooding in California between December 2005 and January 2006.</p>
+
+<pre><code class="r"><span class="identifier">ca.flood.2006</span> <span class="operator">=</span> <span class="identifier">subset</span><span class="paren">(</span><span class="identifier">storm</span>, <span class="identifier">STATE</span><span class="operator">==</span><span class="string">"CA"</span> <span class="operator">&amp;</span> <span class="identifier">EVTYPE48</span><span class="operator">==</span><span class="string">'Flood'</span> <span class="operator">&amp;</span> <span class="identifier">BGN_DATE</span><span class="operator">$</span><span class="identifier">year</span><span class="operator">+</span><span class="number">1900</span><span class="operator">==</span><span class="number">2006</span><span class="paren">)</span>
+<span class="identifier">ca.flood.2006</span><span class="paren">[</span><span class="identifier">which.max</span><span class="paren">(</span><span class="identifier">ca.flood.2006</span><span class="operator">$</span><span class="identifier">nPROPDMG</span><span class="paren">)</span>,<span class="paren">]</span>
+</code></pre>
+
+<pre><code>##          BGN_DATE COUNTY STATE EVTYPE FATALITIES INJURIES PROPDMG
+## 605953 2006-01-01     55    CA  FLOOD          0        0     115
+##        PROPDMGEXP CROPDMG CROPDMGEXP EVTYPE48  nPROPDMG nCROPDMG
+## 605953          B    32.5          M    Flood 1.329e+11 37555071
+</code></pre>
+
+<p>We went to the online NOAA Storm Events Database to look at the <a href="http://www.ncdc.noaa.gov/stormevents/eventdetails.jsp?id=5486532">original record</a>. Yes, property damage is coded as $115 billion, but in the Episode Narrative field, we clearly see that it is likely to be an error.</p>
+
+<p>That's the Episode Narrative: “Major flooding continued into the early hours of January 1st, before the Napa River finally fell below flood stage and the water receeded. Flooding was severe in Downtown Napa from the Napa Creek and the City and Parks Department was hit with $6 million in damage alone. The City of Napa had 600 homes with moderate damage, 150 damaged businesses with costs of at least $70 million.”</p>
+
+<p>So, we're pretty sure that this astounding value should be around $100 millions (not billions). Now, let's fix this error.</p>
+
+<pre><code class="r"><span class="identifier">diff.nPROPDMG</span> <span class="operator">=</span> <span class="number">0.999</span> <span class="operator">*</span> <span class="identifier">ca.flood.2006</span><span class="paren">[</span><span class="identifier">which.max</span><span class="paren">(</span><span class="identifier">ca.flood.2006</span><span class="operator">$</span><span class="identifier">nPROPDMG</span><span class="paren">)</span>,<span class="paren">]</span><span class="operator">$</span><span class="identifier">nPROPDMG</span>
+<span class="comment"># original data.frame</span>
+<span class="identifier">wrong.obs</span> <span class="operator">=</span> <span class="identifier">with</span><span class="paren">(</span><span class="identifier">storm</span>, <span class="identifier">STATE</span><span class="operator">==</span><span class="string">"CA"</span> <span class="operator">&amp;</span> <span class="identifier">EVTYPE48</span><span class="operator">==</span><span class="string">'Flood'</span> <span class="operator">&amp;</span> <span class="identifier">BGN_DATE</span><span class="operator">$</span><span class="identifier">year</span><span class="operator">+</span><span class="number">1900</span><span class="operator">==</span><span class="number">2006</span><span class="paren">)</span>
+<span class="identifier">storm</span><span class="paren">[</span><span class="identifier">wrong.obs</span>, <span class="paren">]</span><span class="operator">$</span><span class="identifier">nPROPDMG</span> <span class="operator">=</span> <span class="identifier">storm</span><span class="paren">[</span><span class="identifier">wrong.obs</span>, <span class="paren">]</span><span class="operator">$</span><span class="identifier">nPROPDMG</span> <span class="operator">-</span> <span class="identifier">diff.nPROPDMG</span>
+<span class="comment"># aggregate data.frame</span>
+<span class="identifier">wrong.obs</span> <span class="operator">=</span> <span class="identifier">with</span><span class="paren">(</span><span class="identifier">storm.agg</span>, <span class="identifier">STATE</span><span class="operator">==</span><span class="string">"CA"</span> <span class="operator">&amp;</span> <span class="identifier">EVTYPE48</span><span class="operator">==</span><span class="string">'Flood'</span> <span class="operator">&amp;</span> <span class="identifier">YEAR</span><span class="operator">==</span><span class="number">2006</span><span class="paren">)</span>
+<span class="identifier">storm.agg</span><span class="paren">[</span><span class="identifier">wrong.obs</span>, <span class="paren">]</span><span class="operator">$</span><span class="identifier">nPROPDMG</span> <span class="operator">=</span> <span class="identifier">storm.agg</span><span class="paren">[</span><span class="identifier">wrong.obs</span>, <span class="paren">]</span><span class="operator">$</span><span class="identifier">nPROPDMG</span> <span class="operator">-</span> <span class="identifier">diff.nPROPDMG</span>
+<span class="comment"># subset 1993-forward data.frame</span>
+<span class="identifier">wrong.obs</span> <span class="operator">=</span> <span class="identifier">with</span><span class="paren">(</span><span class="identifier">storm.agg.93</span>, <span class="identifier">STATE</span><span class="operator">==</span><span class="string">"CA"</span> <span class="operator">&amp;</span> <span class="identifier">EVTYPE48</span><span class="operator">==</span><span class="string">'Flood'</span> <span class="operator">&amp;</span> <span class="identifier">YEAR</span><span class="operator">==</span><span class="number">2006</span><span class="paren">)</span>
+<span class="identifier">storm.agg.93</span><span class="paren">[</span><span class="identifier">wrong.obs</span>, <span class="paren">]</span><span class="operator">$</span><span class="identifier">nPROPDMG</span> <span class="operator">=</span> <span class="identifier">storm.agg.93</span><span class="paren">[</span><span class="identifier">wrong.obs</span>, <span class="paren">]</span><span class="operator">$</span><span class="identifier">nPROPDMG</span> <span class="operator">-</span> <span class="identifier">diff.nPROPDMG</span>
+</code></pre>
+
+<p>Time to redo the economic losses analysis.</p>
+
+<pre><code class="r"><span class="identifier">econ.cons</span> <span class="operator">=</span> <span class="identifier">aggregate</span><span class="paren">(</span><span class="identifier">cbind</span><span class="paren">(</span><span class="identifier">nPROPDMG</span>, <span class="identifier">nCROPDMG</span><span class="paren">)</span> <span class="operator">~</span> <span class="identifier">EVTYPE48</span>, <span class="identifier">data</span><span class="operator">=</span><span class="identifier">storm.agg.93</span>, <span class="identifier">sum</span><span class="paren">)</span>
+<span class="comment"># ordering by FATALITIES and INJURIES</span>
+<span class="identifier">econ.cons.5</span> <span class="operator">=</span> <span class="identifier">lapply</span><span class="paren">(</span><span class="identifier">c</span><span class="paren">(</span><span class="string">"nPROPDMG"</span>, <span class="string">"nCROPDMG"</span><span class="paren">)</span>,
+                        <span class="keyword">function</span><span class="paren">(</span><span class="identifier">n</span><span class="paren">)</span> <span class="identifier">econ.cons</span><span class="paren">[</span>
+                          <span class="identifier">order</span><span class="paren">(</span><span class="identifier">econ.cons</span><span class="paren">[</span><span class="identifier">n</span><span class="paren">]</span>, <span class="identifier">decreasing</span><span class="operator">=</span><span class="literal">TRUE</span><span class="paren">)</span><span class="paren">[</span><span class="number">1</span><span class="operator">:</span><span class="number">5</span><span class="paren">]</span>,
+                          <span class="identifier">c</span><span class="paren">(</span><span class="string">"EVTYPE48"</span>,<span class="identifier">n</span><span class="paren">)</span><span class="paren">]</span><span class="paren">)</span>
+<span class="identifier">econ.cons.5</span>
+</code></pre>
+
+<pre><code>## [[1]]
+##               EVTYPE48  nPROPDMG
+## 25 Hurricane (Typhoon) 1.058e+11
+## 37    Storm Surge/Tide 5.678e+10
+## 15               Flood 4.526e+10
+## 40             Tornado 3.417e+10
+## 14         Flash Flood 2.149e+10
+## 
+## [[2]]
+##               EVTYPE48  nCROPDMG
+## 9              Drought 1.841e+10
+## 15               Flood 1.534e+10
+## 26           Ice Storm 7.891e+09
+## 25 Hurricane (Typhoon) 7.186e+09
+## 19                Hail 3.959e+09
+</code></pre>
+
+<p>This time, the first positions in the properties and crop damage lists are occupied by 'Hurricane (Typhoon)' and 'Drought'. Let's see how has our plot changed. Has Hurricane Katrina claimed its dreadful spot?</p>
+
+<pre><code class="r"><span class="identifier">propdmg.top5</span> <span class="operator">=</span> <span class="identifier">as.character</span><span class="paren">(</span><span class="identifier">econ.cons.5</span><span class="paren">[</span><span class="paren">[</span><span class="number">1</span><span class="paren">]</span><span class="paren">]</span><span class="operator">$</span><span class="identifier">EVTYPE48</span><span class="paren">)</span>
+<span class="identifier">propdmg.agg</span> <span class="operator">=</span> <span class="identifier">aggregate</span><span class="paren">(</span><span class="identifier">nPROPDMG</span> <span class="operator">~</span> <span class="identifier">EVTYPE48</span> <span class="operator">+</span> <span class="identifier">YEAR</span>, <span class="identifier">data</span><span class="operator">=</span><span class="identifier">subset</span><span class="paren">(</span><span class="identifier">storm.agg.93</span>, <span class="identifier">EVTYPE48</span> <span class="operator">%in%</span> <span class="identifier">propdmg.top5</span><span class="paren">)</span>, <span class="identifier">sum</span><span class="paren">)</span>
+<span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">propdmg.agg</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span><span class="operator">=</span><span class="identifier">as.factor</span><span class="paren">(</span><span class="identifier">YEAR</span><span class="paren">)</span>, <span class="identifier">y</span><span class="operator">=</span><span class="identifier">nPROPDMG</span><span class="operator">/</span><span class="number">10</span><span class="operator">^</span><span class="number">9</span>, <span class="identifier">group</span><span class="operator">=</span><span class="identifier">EVTYPE48</span>, <span class="identifier">color</span><span class="operator">=</span><span class="identifier">EVTYPE48</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span> 
+  <span class="identifier">geom_line</span><span class="paren">(</span><span class="identifier">size</span><span class="operator">=</span><span class="number">1</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">geom_point</span><span class="paren">(</span><span class="identifier">size</span><span class="operator">=</span><span class="number">4</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">labs</span><span class="paren">(</span><span class="identifier">title</span><span class="operator">=</span><span class="identifier">expression</span><span class="paren">(</span><span class="identifier">atop</span><span class="paren">(</span><span class="string">"Property damage - 5 most destructive event types"</span>,
+                        <span class="identifier">scriptstyle</span><span class="paren">(</span><span class="string">"After fixing CA flood error"</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span>,
+       <span class="identifier">x</span><span class="operator">=</span><span class="string">"Year"</span>,
+       <span class="identifier">y</span><span class="operator">=</span><span class="string">"Property damages ($ billion)"</span>, <span class="identifier">color</span><span class="operator">=</span><span class="string">"Event type"</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">guides</span><span class="paren">(</span><span class="identifier">fill</span><span class="operator">=</span><span class="literal">FALSE</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">theme_minimal</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">+</span>
+  <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span><span class="operator">=</span><span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span><span class="operator">=</span><span class="number">16</span>, <span class="identifier">face</span><span class="operator">=</span><span class="string">"bold"</span><span class="paren">)</span>,
+        <span class="identifier">panel.grid.major.x</span> <span class="operator">=</span> <span class="identifier">element_blank</span><span class="paren">(</span><span class="paren">)</span>,
+        <span class="identifier">panel.grid.minor.x</span> <span class="operator">=</span> <span class="identifier">element_blank</span><span class="paren">(</span><span class="paren">)</span>,
+        <span class="identifier">legend.position</span><span class="operator">=</span><span class="identifier">c</span><span class="paren">(</span><span class="number">0</span>,<span class="number">0.95</span><span class="paren">)</span>,
+        <span class="identifier">legend.justification</span><span class="operator">=</span><span class="identifier">c</span><span class="paren">(</span><span class="number">0</span>,<span class="number">1</span><span class="paren">)</span>,
+        <span class="identifier">legend.direction</span><span class="operator">=</span><span class="string">"vertical"</span>,
+        <span class="identifier">legend.key.height</span><span class="operator">=</span><span class="identifier">unit</span><span class="paren">(</span><span class="number">5</span>, <span class="string">"mm"</span><span class="paren">)</span><span class="paren">)</span>
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk plot_propdmg2"> </p>
+
+<h2>Results</h2>
+
+<p>In our analysis, we found that the most harmful weather events to population health were heat-related events ('Excessive Heat' and 'Heat'), along with tornadoes, flood-like events, thunderstorm winds and lightning events.</p>
+
+<pre><code class="r"><span class="identifier">most.harmful.5</span>
+</code></pre>
+
+<pre><code>## [[1]]
+##          EVTYPE48 FATALITIES
+## 12 Excessive Heat       2016
+## 40        Tornado       1643
+## 20           Heat       1161
+## 14    Flash Flood       1065
+## 29      Lightning        817
+## 
+## [[2]]
+##             EVTYPE48 INJURIES
+## 40           Tornado    23303
+## 15             Flood     6794
+## 12    Excessive Heat     6680
+## 39 Thunderstorm Wind     6231
+## 29         Lightning     5232
+</code></pre>
+
+<p>Concerning property economic losses, the most destructive events were hurricanes, storm surges/tides, flood (including flash floods) and tornadoes; in the case of crop losses, drought, ice storm and hail, besides hurricanes and flood, are the most important ones.</p>
+
+<pre><code class="r"><span class="identifier">econ.cons.5</span>
+</code></pre>
+
+<pre><code>## [[1]]
+##               EVTYPE48  nPROPDMG
+## 25 Hurricane (Typhoon) 1.058e+11
+## 37    Storm Surge/Tide 5.678e+10
+## 15               Flood 4.526e+10
+## 40             Tornado 3.417e+10
+## 14         Flash Flood 2.149e+10
+## 
+## [[2]]
+##               EVTYPE48  nCROPDMG
+## 9              Drought 1.841e+10
+## 15               Flood 1.534e+10
+## 26           Ice Storm 7.891e+09
+## 25 Hurricane (Typhoon) 7.186e+09
+## 19                Hail 3.959e+09
+</code></pre>
+
+<pre><code class="r"><span class="identifier">options</span><span class="paren">(</span><span class="identifier">rpubs.upload.method</span> <span class="operator">=</span> <span class="string">"internal"</span><span class="paren">)</span>
+</code></pre>
+
+
+
+
+
+</body></html>
