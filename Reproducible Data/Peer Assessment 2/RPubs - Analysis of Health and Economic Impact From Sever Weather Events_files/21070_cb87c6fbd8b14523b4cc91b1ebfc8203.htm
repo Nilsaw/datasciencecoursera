@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<!-- saved from url=(0087)http://rstudio-pubs-static.s3.amazonaws.com/21070_cb87c6fbd8b14523b4cc91b1ebfc8203.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta http-equiv="x-ua-compatible" content="IE=9">
+
+<title>Analysis of Health and Economic Impact From Severe Weather Events</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<style type="text/css"></style></head>
+
+<body>
+<h1>Analysis of Health and Economic Impact From Severe Weather Events</h1>
+
+<h2>Synopsis</h2>
+
+<p>This analysis looks at the human and economic damage caused by severe weather events.<br>
+It uses the NOAA Storm Database.<br>
+This is completed for Reproducible Research: Peer Assessment 2.<br>
+This report will answer two questions: </p>
+
+<ol>
+<li><p>Across the United States, which types of events are most harmful with respect to <strong>population health</strong>? </p></li>
+<li><p>Across the United States, which types of events have the <strong>greatest economic consequences</strong>? </p></li>
+</ol>
+
+<p>I load and explore the data first.<br>
+Because the integrety of the event variable is so bad, I create groups based on specifice words and completed the analysis with these groups.  </p>
+
+<h2>Data Procesing</h2>
+
+<h3>Get libraries</h3>
+
+<pre><code class="r"><span class="keyword">library</span><span class="paren">(</span><span class="identifier">plyr</span><span class="paren">)</span>
+<span class="keyword">library</span><span class="paren">(</span><span class="identifier">rCharts</span><span class="paren">)</span>
+<span class="keyword">library</span><span class="paren">(</span><span class="identifier">reshape2</span><span class="paren">)</span>
+</code></pre>
+
+<h3>Load Data</h3>
+
+<pre><code class="r"><span class="keyword">if</span><span class="paren">(</span><span class="operator">!</span><span class="identifier">file.exists</span><span class="paren">(</span><span class="string">"repdata-data-StormData.csv.bz2"</span><span class="paren">)</span><span class="paren">)</span> <span class="paren">{</span>
+  <span class="identifier">download.file</span><span class="paren">(</span><span class="string">"https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"</span>,
+                 <span class="string">"repdata-data-StormData.csv.bz2"</span>,
+                 <span class="identifier">method</span> <span class="operator">=</span> <span class="string">"curl"</span><span class="paren">)</span>
+<span class="paren">}</span>
+
+<span class="identifier">df</span> <span class="operator">&lt;-</span> <span class="identifier">read.csv</span><span class="paren">(</span><span class="string">"repdata-data-StormData.csv.bz2"</span><span class="paren">)</span>
+</code></pre>
+
+<h3>Explore Event Types</h3>
+
+<p>The event types are incredibly variable<br>
+For example there are 985 event types<br>
+The phrase 'wind' occurs in 220 event types<br>
+I will just show the top and bottom 20</p>
+
+<pre><code class="r"><span class="comment">## Total event types</span>
+<span class="identifier">length</span><span class="paren">(</span><span class="identifier">unique</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>[1] 985
+</code></pre>
+
+<pre><code class="r"><span class="comment">## Find occurances of 'wind'</span>
+<span class="identifier">tmp</span> <span class="operator">&lt;-</span> <span class="identifier">grep</span><span class="paren">(</span><span class="string">'wind'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span>, <span class="identifier">value</span><span class="operator">=</span><span class="literal">T</span><span class="paren">)</span>
+<span class="identifier">length</span><span class="paren">(</span><span class="identifier">table</span><span class="paren">(</span><span class="identifier">tmp</span><span class="paren">)</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>[1] 220
+</code></pre>
+
+<pre><code class="r"><span class="identifier">head</span><span class="paren">(</span><span class="identifier">arrange</span><span class="paren">(</span><span class="identifier">as.data.frame</span><span class="paren">(</span><span class="identifier">table</span><span class="paren">(</span><span class="identifier">tmp</span><span class="paren">)</span><span class="paren">)</span>,<span class="identifier">desc</span><span class="paren">(</span><span class="identifier">Freq</span><span class="paren">)</span><span class="paren">)</span>,<span class="number">20</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>                        tmp   Freq
+1                 tstm wind 219942
+2         thunderstorm wind  82564
+3        thunderstorm winds  20843
+4                 high wind  20214
+5          marine tstm wind   6175
+6  marine thunderstorm wind   5812
+7               strong wind   3569
+8                high winds   1533
+9            tstm wind/hail   1028
+10  extreme cold/wind chill   1002
+11          cold/wind chill    539
+12                     wind    346
+13        extreme windchill    204
+14             strong winds    204
+15         marine high wind    135
+16              gusty winds     65
+17  thunderstorm winds hail     61
+18      thunderstorm windss     51
+19       marine strong wind     48
+20          tstm wind (g45)     39
+</code></pre>
+
+<pre><code class="r"><span class="identifier">tail</span><span class="paren">(</span><span class="identifier">arrange</span><span class="paren">(</span><span class="identifier">as.data.frame</span><span class="paren">(</span><span class="identifier">table</span><span class="paren">(</span><span class="identifier">tmp</span><span class="paren">)</span><span class="paren">)</span>,<span class="identifier">desc</span><span class="paren">(</span><span class="identifier">Freq</span><span class="paren">)</span><span class="paren">)</span>,<span class="number">20</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>                           tmp Freq
+201 tornadoes, tstm wind, hail    1
+202           tstm wind  (g45)    1
+203             tstm wind (41)    1
+204            tstm wind (g35)    1
+205               tstm wind 40    1
+206               tstm wind 45    1
+207               tstm wind 50    1
+208              tstm wind 65)    1
+209    tstm wind and lightning    1
+210           tstm wind damage    1
+211              tstm wind g45    1
+212              tstm wind g58    1
+213           tunderstorm wind    1
+214              wind and wave    1
+215       wind chill/high wind    1
+216                 wind storm    1
+217                  wind/hail    1
+218    winter storm high winds    1
+219     winter storm/high wind    1
+220    winter storm/high winds    1
+</code></pre>
+
+<p>This is bad data integrity.<br>
+Its a huge problems with the data set.<br>
+For this analysis, I will scan the top 100 events and put them into logical groups.<br>
+I am showing the top 20 here.</p>
+
+<pre><code class="r"><span class="comment">## top 20 event occurences</span>
+<span class="identifier">tmp</span> <span class="operator">&lt;-</span> <span class="identifier">arrange</span><span class="paren">(</span><span class="identifier">as.data.frame</span><span class="paren">(</span><span class="identifier">table</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span>,<span class="identifier">desc</span><span class="paren">(</span><span class="identifier">Freq</span><span class="paren">)</span><span class="paren">)</span>
+<span class="identifier">head</span><span class="paren">(</span><span class="identifier">tmp</span>,<span class="number">20</span><span class="paren">)</span>
+</code></pre>
+
+<pre><code>                       Var1   Freq
+1                      HAIL 288661
+2                 TSTM WIND 219940
+3         THUNDERSTORM WIND  82563
+4                   TORNADO  60652
+5               FLASH FLOOD  54277
+6                     FLOOD  25326
+7        THUNDERSTORM WINDS  20843
+8                 HIGH WIND  20212
+9                 LIGHTNING  15754
+10               HEAVY SNOW  15708
+11               HEAVY RAIN  11723
+12             WINTER STORM  11433
+13           WINTER WEATHER   7026
+14             FUNNEL CLOUD   6839
+15         MARINE TSTM WIND   6175
+16 MARINE THUNDERSTORM WIND   5812
+17               WATERSPOUT   3796
+18              STRONG WIND   3566
+19     URBAN/SML STREAM FLD   3392
+20                 WILDFIRE   2761
+</code></pre>
+
+<p>Now I create a new variable and set the event type.<br>
+I go from general groups to more specific groups.<br>
+Each event can have only one type.  </p>
+
+<pre><code class="r"><span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span> <span class="operator">&lt;-</span> <span class="literal">NA</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'heat|warm'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'heat'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'cold'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'cold'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'wind'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'wind'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'surf|current|tide'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'ocean'</span>
+
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'snow|winter|wintry|sleet|blizzard|ice|freeze|avalanche'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'snow'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'rain'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'rain'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'hail'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'hail'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'flood|fld'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'flood'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'tornado|funnel|waterspout|devil'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'tornado'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'hurricane|depression'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'hurricane'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'lightning'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'lightning'</span>
+
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'fog'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'fog'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'fire'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'fire'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'drought'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'drought'</span>
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">grep</span><span class="paren">(</span><span class="string">'landside'</span>, <span class="identifier">tolower</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">EVTYPE</span><span class="paren">)</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'landslide'</span>
+
+<span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">[</span><span class="identifier">is.na</span><span class="paren">(</span><span class="identifier">df</span><span class="operator">$</span><span class="identifier">event_type</span><span class="paren">)</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">'other'</span>
+</code></pre>
+
+<p>Lets look at the number of events in each group.</p>
+
+<pre><code class="r"><span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">ddply</span><span class="paren">(</span><span class="identifier">df</span>, .<span class="paren">(</span><span class="identifier">event_type</span><span class="paren">)</span>, <span class="identifier">summarise</span>,
+             <span class="identifier">count</span> <span class="operator">=</span> <span class="identifier">length</span><span class="paren">(</span><span class="identifier">EVTYPE</span><span class="paren">)</span>
+             <span class="paren">)</span>
+
+<span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">arrange</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">desc</span><span class="paren">(</span><span class="identifier">count</span><span class="paren">)</span><span class="paren">)</span>
+
+<span class="identifier">df2</span>
+</code></pre>
+
+<pre><code>   event_type  count
+1        wind 363686
+2        hail 290398
+3       flood  86127
+4     tornado  71686
+5        snow  44080
+6   lightning  15775
+7        rain  12210
+8        fire   4240
+9       other   3233
+10       heat   2958
+11    drought   2512
+12      ocean   2269
+13        fog   1883
+14       cold    892
+15  hurricane    348
+</code></pre>
+
+<p>Wind and hail have many more occurences than other events. 363,686 and 290,398 respectively.<br>
+Flood, tornado, snow, lightning, rain have between 10,000 and 90,000 occurences.<br>
+The others have less than 5,000 occurences</p>
+
+<p>Now we can break down human and economic damage by major groups.</p>
+
+<hr>
+
+<h2>Results</h2>
+
+<h3>Across the United States, which types of events are most harmful with respect to population health?</h3>
+
+<p>Lets look at the human damage in <strong>Total</strong></p>
+
+<pre><code class="r"><span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">ddply</span><span class="paren">(</span><span class="identifier">df</span>, .<span class="paren">(</span><span class="identifier">event_type</span><span class="paren">)</span>, <span class="identifier">summarise</span>,
+             <span class="identifier">fatalities</span> <span class="operator">=</span> <span class="identifier">sum</span><span class="paren">(</span><span class="identifier">FATALITIES</span><span class="paren">)</span>, 
+             <span class="identifier">injuries</span> <span class="operator">=</span> <span class="identifier">sum</span><span class="paren">(</span><span class="identifier">INJURIES</span><span class="paren">)</span>    
+            <span class="paren">)</span>
+
+<span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">arrange</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">desc</span><span class="paren">(</span><span class="identifier">injuries</span><span class="paren">)</span><span class="paren">)</span>
+
+<span class="identifier">df3</span> <span class="operator">&lt;-</span> <span class="identifier">melt</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">id.vars</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="string">'event_type'</span><span class="paren">)</span><span class="paren">)</span>
+
+<span class="identifier">p1</span> <span class="operator">&lt;-</span> <span class="identifier">nPlot</span><span class="paren">(</span><span class="identifier">value</span> <span class="operator">~</span> <span class="identifier">event_type</span>, <span class="identifier">group</span> <span class="operator">=</span> <span class="string">'variable'</span>, <span class="identifier">data</span> <span class="operator">=</span> <span class="identifier">df3</span>, <span class="identifier">type</span> <span class="operator">=</span> <span class="string">'multiBarHorizontalChart'</span><span class="paren">)</span>
+<span class="identifier">p1</span><span class="operator">$</span><span class="identifier">chart</span><span class="paren">(</span><span class="identifier">stacked</span> <span class="operator">=</span> <span class="literal">TRUE</span><span class="paren">)</span>
+<span class="identifier">p1</span><span class="operator">$</span><span class="identifier">show</span><span class="paren">(</span><span class="string">'inline'</span>, <span class="identifier">include_assets</span> <span class="operator">=</span> <span class="literal">TRUE</span>, <span class="identifier">cdn</span> <span class="operator">=</span> <span class="literal">TRUE</span><span class="paren">)</span>
+</code></pre>
+
+<p><link rel="stylesheet" href="http://nvd3.org/assets/css/nv.d3.css"></p>
+
+<script type="text/javascript" src="jquery.min.js"></script>
+
+<script type="text/javascript" src="d3.v3.min.js"></script>
+
+<script type="text/javascript" src="nv.d3.min-new.js"></script>
+
+<script type="text/javascript" src="fisheye.js"></script> 
+
+<p><style>
+  .rChart {
+    display: block;
+    margin-left: auto; 
+    margin-right: auto;
+    width: 800px;
+    height: 400px;
+  }<br/>
+  </style></p>
+
+<div id="chart14edd4f85821a" class="rChart nvd3"><svg><g class="nvd3 nv-wrap nv-multiBarHorizontalChart" transform="translate(60,30)"><g><g class="nv-x nv-axis"><g class="nvd3 nv-wrap nv-axis"><g><g class="tick" transform="translate(0,11.655629139072849)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">tornado</text></g><g class="tick" transform="translate(0,32.8476821192053)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">wind</text></g><g class="tick" transform="translate(0,54.03973509933775)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">heat</text></g><g class="tick" transform="translate(0,75.2317880794702)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">flood</text></g><g class="tick" transform="translate(0,96.42384105960265)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">snow</text></g><g class="tick" transform="translate(0,117.6158940397351)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">lightning</text></g><g class="tick" transform="translate(0,138.80794701986758)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">fire</text></g><g class="tick" transform="translate(0,160.00000000000003)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">hail</text></g><g class="tick" transform="translate(0,181.19205298013247)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">other</text></g><g class="tick" transform="translate(0,202.38410596026492)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">hurricane</text></g><g class="tick" transform="translate(0,223.57615894039736)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">fog</text></g><g class="tick" transform="translate(0,244.76821192052984)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">ocean</text></g><g class="tick" transform="translate(0,265.9602649006623)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">rain</text></g><g class="tick" transform="translate(0,287.1523178807947)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">cold</text></g><g class="tick" transform="translate(0,308.3443708609272)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">drought</text></g><path class="domain" d="M0,0H0V320H0"></path><text class="nv-axislabel" transform="rotate(-90)" y="-63" x="-1.0596026490066226" style="text-anchor: middle; opacity: 1;"></text></g></g></g><g class="nv-y nv-axis" transform="translate(0,320)"><g class="nvd3 nv-wrap nv-axis"><g><g class="tick" transform="translate(0,0)" style="opacity: 1;"><line y2="-320" x2="0"></line></g><g class="tick" transform="translate(148.22744678222918,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">20,000.0</text></g><g class="tick" transform="translate(296.45489356445836,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">40,000.0</text></g><g class="tick" transform="translate(444.6823403466875,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">60,000.0</text></g><g class="tick" transform="translate(592.9097871289167,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">80,000.0</text></g><path class="domain" d="M0,0V0H720V0"></path><text class="nv-axislabel" text-anchor="middle" y="36" x="360"></text></g><g class="nv-axisMaxMin" transform="translate(0,0)"><text dy=".71em" y="3" transform="rotate(0 0,0)" style="text-anchor: middle;">0.0</text></g><g class="nv-axisMaxMin" transform="translate(720,0)"><text dy=".71em" y="3" transform="rotate(0 0,0)" style="text-anchor: middle;">97,148.0</text></g></g></g><g class="nv-barsWrap"><g class="nvd3 nv-wrap nv-multibarHorizontal" transform="translate(0,0)"><defs></defs><g><g class="nv-groups"><g class="nv-group nv-series-0" style="stroke-opacity: 1; fill-opacity: 0.75; fill: rgb(31, 119, 180); stroke: rgb(31, 119, 180);"><g transform="translate(0,2.1192052364349365)" class="nv-bar positive"><rect width="41.99283567340552" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,23.31125831604004)" class="nv-bar positive"><rect width="10.442623625808045" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,44.50331115722656)" class="nv-bar positive"><rect width="23.508873059661546" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,65.69536590576172)" class="nv-bar positive"><rect width="11.509861242640095" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,86.88742065429688)" class="nv-bar positive"><rect width="6.4330711903487465" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,108.0794677734375)" class="nv-bar positive"><rect width="6.055091201054061" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,129.2715301513672)" class="nv-bar positive"><rect width="0.6670235105200313" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,150.4635772705078)" class="nv-bar positive"><rect width="0.14822744678222916" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,171.65562438964844)" class="nv-bar positive"><rect width="1.8676658294560877" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,192.84768676757812)" class="nv-bar positive"><rect width="1.0005352657800468" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,214.03973388671875)" class="nv-bar positive"><rect width="0.6003211594680281" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,235.23178100585938)" class="nv-bar positive"><rect width="5.551117881994482" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,256.423828125)" class="nv-bar positive"><rect width="0.8374850743195948" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,277.61590576171875)" class="nv-bar positive"><rect width="1.5860336805698523" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,298.8079528808594)" class="nv-bar positive"><rect width="0.04446823403466875" height="19.072847682119207"></rect><text></text></g></g><g class="nv-group nv-series-1" style="stroke-opacity: 1; fill-opacity: 0.75; fill: rgb(174, 199, 232); stroke: rgb(174, 199, 232);"><g transform="translate(41.992835998535156,2.1192052364349365)" class="nv-bar positive"><rect width="678.0071643265944" height="19.072847682119207"></rect><text></text></g><g transform="translate(10.44262409210205,23.31125831604004)" class="nv-bar positive"><rect width="84.0746078148804" height="19.072847682119207"></rect><text></text></g><g transform="translate(23.508872985839844,44.50331115722656)" class="nv-bar positive"><rect width="68.39214394532053" height="19.072847682119207"></rect><text></text></g><g transform="translate(11.50986099243164,65.69536590576172)" class="nv-bar positive"><rect width="64.35294602050479" height="19.072847682119207"></rect><text></text></g><g transform="translate(6.433071136474609,86.88742065429688)" class="nv-bar positive"><rect width="46.387779470498614" height="19.072847682119207"></rect><text></text></g><g transform="translate(6.055091381072998,108.0794677734375)" class="nv-bar positive"><rect width="38.77630007823115" height="19.072847682119207"></rect><text></text></g><g transform="translate(0.6670235395431519,129.2715301513672)" class="nv-bar positive"><rect width="11.917486721291223" height="19.072847682119207"></rect><text></text></g><g transform="translate(0.14822745323181152,150.4635772705078)" class="nv-bar positive"><rect width="10.872483221476509" height="19.072847682119207"></rect><text></text></g><g transform="translate(1.8676657676696777,171.65562438964844)" class="nv-bar positive"><rect width="10.650142051303163" height="19.072847682119207"></rect><text></text></g><g transform="translate(1.000535249710083,192.84768676757812)" class="nv-bar positive"><rect width="9.842302466340017" height="19.072847682119207"></rect><text></text></g><g transform="translate(0.6003212332725525,214.03973388671875)" class="nv-bar positive"><rect width="7.982048009223042" height="19.072847682119207"></rect><text></text></g><g transform="translate(5.551117897033691,235.23178100585938)" class="nv-bar positive"><rect width="5.780870424506938" height="19.072847682119207"></rect><text></text></g><g transform="translate(0.837485134601593,256.423828125)" class="nv-bar positive"><rect width="2.2604685634289945" height="19.072847682119207"></rect><text></text></g><g transform="translate(1.586033582687378,277.61590576171875)" class="nv-bar positive"><rect width="2.067772882612097" height="19.072847682119207"></rect><text></text></g><g transform="translate(0.0444682352244854,298.8079528808594)" class="nv-bar positive"><rect width="0.14081607444311767" height="19.072847682119207"></rect><text></text></g></g></g></g></g></g><g class="nv-legendWrap" transform="translate(180,-30)"><g class="nvd3 nv-legend" transform="translate(0,5)"><g transform="translate(397,5)"><g class="nv-series" transform="translate(0,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(31, 119, 180); stroke: rgb(31, 119, 180);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">fatalities</text></g><g class="nv-series" transform="translate(74,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(174, 199, 232); stroke: rgb(174, 199, 232);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">injuries</text></g></g></g></g><g class="nv-controlsWrap" transform="translate(0,-30)"><g class="nvd3 nv-legend" transform="translate(0,5)"><g transform="translate(32,5)"><g class="nv-series disabled" transform="translate(0,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(68, 68, 68); stroke: rgb(68, 68, 68);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">Grouped</text></g><g class="nv-series" transform="translate(76,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(68, 68, 68); stroke: rgb(68, 68, 68);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">Stacked</text></g></g></g></g></g></g></svg></div>
+
+<script type="text/javascript">
+ $(document).ready(function(){
+      drawchart14edd4f85821a()
+    });
+    function drawchart14edd4f85821a(){  
+      var opts = {
+ "dom": "chart14edd4f85821a",
+"width":    800,
+"height":    400,
+"x": "event_type",
+"y": "value",
+"group": "variable",
+"type": "multiBarHorizontalChart",
+"id": "chart14edd4f85821a" 
+},
+        data = [
+ {
+ "event_type": "tornado",
+"variable": "fatalities",
+"value":           5666 
+},
+{
+ "event_type": "wind",
+"variable": "fatalities",
+"value":           1409 
+},
+{
+ "event_type": "heat",
+"variable": "fatalities",
+"value":           3172 
+},
+{
+ "event_type": "flood",
+"variable": "fatalities",
+"value":           1553 
+},
+{
+ "event_type": "snow",
+"variable": "fatalities",
+"value":            868 
+},
+{
+ "event_type": "lightning",
+"variable": "fatalities",
+"value":            817 
+},
+{
+ "event_type": "fire",
+"variable": "fatalities",
+"value":             90 
+},
+{
+ "event_type": "hail",
+"variable": "fatalities",
+"value":             20 
+},
+{
+ "event_type": "other",
+"variable": "fatalities",
+"value":            252 
+},
+{
+ "event_type": "hurricane",
+"variable": "fatalities",
+"value":            135 
+},
+{
+ "event_type": "fog",
+"variable": "fatalities",
+"value":             81 
+},
+{
+ "event_type": "ocean",
+"variable": "fatalities",
+"value":            749 
+},
+{
+ "event_type": "rain",
+"variable": "fatalities",
+"value":            113 
+},
+{
+ "event_type": "cold",
+"variable": "fatalities",
+"value":            214 
+},
+{
+ "event_type": "drought",
+"variable": "fatalities",
+"value":              6 
+},
+{
+ "event_type": "tornado",
+"variable": "injuries",
+"value":          91482 
+},
+{
+ "event_type": "wind",
+"variable": "injuries",
+"value":          11344 
+},
+{
+ "event_type": "heat",
+"variable": "injuries",
+"value":           9228 
+},
+{
+ "event_type": "flood",
+"variable": "injuries",
+"value":           8683 
+},
+{
+ "event_type": "snow",
+"variable": "injuries",
+"value":           6259 
+},
+{
+ "event_type": "lightning",
+"variable": "injuries",
+"value":           5232 
+},
+{
+ "event_type": "fire",
+"variable": "injuries",
+"value":           1608 
+},
+{
+ "event_type": "hail",
+"variable": "injuries",
+"value":           1467 
+},
+{
+ "event_type": "other",
+"variable": "injuries",
+"value":           1437 
+},
+{
+ "event_type": "hurricane",
+"variable": "injuries",
+"value":           1328 
+},
+{
+ "event_type": "fog",
+"variable": "injuries",
+"value":           1077 
+},
+{
+ "event_type": "ocean",
+"variable": "injuries",
+"value":            780 
+},
+{
+ "event_type": "rain",
+"variable": "injuries",
+"value":            305 
+},
+{
+ "event_type": "cold",
+"variable": "injuries",
+"value":            279 
+},
+{
+ "event_type": "drought",
+"variable": "injuries",
+"value":             19 
+} 
+]
+  
+      if(!(opts.type==="pieChart" || opts.type==="sparklinePlus")) {
+        var data = d3.nest()
+          .key(function(d){
+            //return opts.group === undefined ? 'main' : d[opts.group]
+            //instead of main would think a better default is opts.x
+            return opts.group === undefined ? opts.y : d[opts.group];
+          })
+          .entries(data);
+      }
+      
+      if (opts.disabled != undefined){
+        data.map(function(d, i){
+          d.disabled = opts.disabled[i]
+        })
+      }
+      
+      nv.addGraph(function() {
+        var chart = nv.models[opts.type]()
+          .x(function(d) { return d[opts.x] })
+          .y(function(d) { return d[opts.y] })
+          .width(opts.width)
+          .height(opts.height)
+         
+        chart
+  .stacked(true)
+          
+        
+
+        
+        
+        
+      
+       d3.select("#" + opts.id)
+        .append('svg')
+        .datum(data)
+        .transition().duration(500)
+        .call(chart);
+
+       nv.utils.windowResize(chart.update);
+       return chart;
+      });
+    };
+</script>
+
+<p><strong>Figure 1: Total human fatalities and injuries by event type</strong>  </p>
+
+<p>Tornados have caused the most injuries and fatalities.<br>
+Wind, heat, flood, snow, and lightning are next.</p>
+
+<hr>
+
+<p>Lets look at the human damage on <strong>Per Event</strong></p>
+
+<pre><code class="r"><span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">ddply</span><span class="paren">(</span><span class="identifier">df</span>, .<span class="paren">(</span><span class="identifier">event_type</span><span class="paren">)</span>, <span class="identifier">summarise</span>,
+             <span class="identifier">fatalities</span> <span class="operator">=</span> <span class="identifier">mean</span><span class="paren">(</span><span class="identifier">FATALITIES</span><span class="paren">)</span>, 
+             <span class="identifier">injuries</span> <span class="operator">=</span> <span class="identifier">mean</span><span class="paren">(</span><span class="identifier">INJURIES</span><span class="paren">)</span>    
+            <span class="paren">)</span>
+
+<span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">arrange</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">desc</span><span class="paren">(</span><span class="identifier">injuries</span><span class="paren">)</span><span class="paren">)</span>
+
+<span class="identifier">df3</span> <span class="operator">&lt;-</span> <span class="identifier">melt</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">id.vars</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="string">'event_type'</span><span class="paren">)</span><span class="paren">)</span>
+
+<span class="identifier">p1</span> <span class="operator">&lt;-</span> <span class="identifier">nPlot</span><span class="paren">(</span><span class="identifier">value</span> <span class="operator">~</span> <span class="identifier">event_type</span>, <span class="identifier">group</span> <span class="operator">=</span> <span class="string">'variable'</span>, <span class="identifier">data</span> <span class="operator">=</span> <span class="identifier">df3</span>, <span class="identifier">type</span> <span class="operator">=</span> <span class="string">'multiBarHorizontalChart'</span><span class="paren">)</span>
+<span class="identifier">p1</span><span class="operator">$</span><span class="identifier">chart</span><span class="paren">(</span><span class="identifier">stacked</span> <span class="operator">=</span> <span class="literal">TRUE</span><span class="paren">)</span>
+<span class="identifier">p1</span><span class="operator">$</span><span class="identifier">show</span><span class="paren">(</span><span class="string">'inline'</span>, <span class="identifier">include_assets</span> <span class="operator">=</span> <span class="literal">TRUE</span>, <span class="identifier">cdn</span> <span class="operator">=</span> <span class="literal">TRUE</span><span class="paren">)</span>
+</code></pre>
+
+<p><link rel="stylesheet" href="http://nvd3.org/assets/css/nv.d3.css"></p>
+
+<script type="text/javascript" src="jquery.min.js"></script>
+
+<script type="text/javascript" src="d3.v3.min.js"></script>
+
+<script type="text/javascript" src="nv.d3.min-new.js"></script>
+
+<script type="text/javascript" src="fisheye.js"></script> 
+
+<p><style>
+  .rChart {
+    display: block;
+    margin-left: auto; 
+    margin-right: auto;
+    width: 800px;
+    height: 400px;
+  }<br/>
+  </style></p>
+
+<div id="chart14d0f513af31b" class="rChart nvd3"><svg><g class="nvd3 nv-wrap nv-multiBarHorizontalChart" transform="translate(60,30)"><g><g class="nv-x nv-axis"><g class="nvd3 nv-wrap nv-axis"><g><g class="tick" transform="translate(0,11.655629139072849)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">hurricane</text></g><g class="tick" transform="translate(0,32.8476821192053)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">heat</text></g><g class="tick" transform="translate(0,54.03973509933775)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">tornado</text></g><g class="tick" transform="translate(0,75.2317880794702)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">fog</text></g><g class="tick" transform="translate(0,96.42384105960265)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">other</text></g><g class="tick" transform="translate(0,117.6158940397351)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">fire</text></g><g class="tick" transform="translate(0,138.80794701986758)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">ocean</text></g><g class="tick" transform="translate(0,160.00000000000003)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">lightning</text></g><g class="tick" transform="translate(0,181.19205298013247)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">cold</text></g><g class="tick" transform="translate(0,202.38410596026492)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">snow</text></g><g class="tick" transform="translate(0,223.57615894039736)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">flood</text></g><g class="tick" transform="translate(0,244.76821192052984)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">wind</text></g><g class="tick" transform="translate(0,265.9602649006623)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">rain</text></g><g class="tick" transform="translate(0,287.1523178807947)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">drought</text></g><g class="tick" transform="translate(0,308.3443708609272)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">hail</text></g><path class="domain" d="M0,0H0V320H0"></path><text class="nv-axislabel" transform="rotate(-90)" y="-63" x="-1.0596026490066226" style="text-anchor: middle; opacity: 1;"></text></g></g></g><g class="nv-y nv-axis" transform="translate(0,320)"><g class="nvd3 nv-wrap nv-axis"><g><g class="tick" transform="translate(0,0)" style="opacity: 1;"><line y2="-320" x2="0"></line></g><g class="tick" transform="translate(85.63226247436667,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">0.5</text></g><g class="tick" transform="translate(171.26452494873334,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">1.0</text></g><g class="tick" transform="translate(256.8967874231,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">1.5</text></g><g class="tick" transform="translate(342.5290498974667,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">2.0</text></g><g class="tick" transform="translate(428.1613123718333,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">2.5</text></g><g class="tick" transform="translate(513.7935748462,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">3.0</text></g><g class="tick" transform="translate(599.4258373205666,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">3.5</text></g><g class="tick" transform="translate(685.0580997949334,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">4.0</text></g><path class="domain" d="M0,0V0H720V0"></path><text class="nv-axislabel" text-anchor="middle" y="36" x="360"></text></g><g class="nv-axisMaxMin" transform="translate(0,0)"><text dy=".71em" y="3" transform="rotate(0 0,0)" style="text-anchor: middle;">0.0</text></g><g class="nv-axisMaxMin" transform="translate(720,0)"><text dy=".71em" y="3" transform="rotate(0 0,0)" style="text-anchor: middle;">4.2</text></g></g></g><g class="nv-barsWrap"><g class="nvd3 nv-wrap nv-multibarHorizontal" transform="translate(0,0)"><defs></defs><g><g class="nv-groups"><g class="nv-group nv-series-0" style="stroke-opacity: 1; fill-opacity: 0.75; fill: rgb(31, 119, 180); stroke: rgb(31, 119, 180);"><g transform="translate(0,2.1192052364349365)" class="nv-bar positive"><rect width="66.43882433356742" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,23.31125831604004)" class="nv-bar positive"><rect width="183.65485907277045" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,44.50331115722656)" class="nv-bar positive"><rect width="13.536601266069667" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,65.69536590576172)" class="nv-bar positive"><rect width="7.367194116222296" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,86.88742065429688)" class="nv-bar positive"><rect width="13.349415492447129" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,108.0794677734375)" class="nv-bar positive"><rect width="3.635331897496762" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,129.2715301513672)" class="nv-bar positive"><rect width="56.53465367412419" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,150.4635772705078)" class="nv-bar positive"><rect width="8.86992817008697" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,171.65562438964844)" class="nv-bar positive"><rect width="41.08812594060763" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,192.84768676757812)" class="nv-bar positive"><rect width="3.372450264417587" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,214.03973388671875)" class="nv-bar positive"><rect width="3.088158269131046" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,235.23178100585938)" class="nv-bar positive"><rect width="0.663516648022571" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,256.423828125)" class="nv-bar positive"><rect width="1.5850033840463829" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,277.61590576171875)" class="nv-bar positive"><rect width="0.40907131755268406" height="19.072847682119207"></rect><text></text></g><g transform="translate(0,298.8079528808594)" class="nv-bar positive"><rect width="0.011795158709682778" height="19.072847682119207"></rect><text></text></g></g><g class="nv-group nv-series-1" style="stroke-opacity: 1; fill-opacity: 0.75; fill: rgb(174, 199, 232); stroke: rgb(174, 199, 232);"><g transform="translate(66.43882751464844,2.1192052364349365)" class="nv-bar positive"><rect width="653.5611756664325" height="19.072847682119207"></rect><text></text></g><g transform="translate(183.6548614501953,23.31125831604004)" class="nv-bar positive"><rect width="534.2897350326849" height="19.072847682119207"></rect><text></text></g><g transform="translate(13.536601066589355,44.50331115722656)" class="nv-bar positive"><rect width="218.55901112287944" height="19.072847682119207"></rect><text></text></g><g transform="translate(7.367194175720215,65.69536590576172)" class="nv-bar positive"><rect width="97.95639584162178" height="19.072847682119207"></rect><text></text></g><g transform="translate(13.34941577911377,86.88742065429688)" class="nv-bar positive"><rect width="76.12345262955083" height="19.072847682119207"></rect><text></text></g><g transform="translate(3.635331869125366,108.0794677734375)" class="nv-bar positive"><rect width="64.95126323527984" height="19.072847682119207"></rect><text></text></g><g transform="translate(56.53465270996094,129.2715301513672)" class="nv-bar positive"><rect width="58.87453920669696" height="19.072847682119207"></rect><text></text></g><g transform="translate(8.869928359985352,150.4635772705078)" class="nv-bar positive"><rect width="56.802281745282734" height="19.072847682119207"></rect><text></text></g><g transform="translate(41.08812713623047,171.65562438964844)" class="nv-bar positive"><rect width="53.56816419360673" height="19.072847682119207"></rect><text></text></g><g transform="translate(3.372450351715088,192.84768676757812)" class="nv-bar positive"><rect width="24.318163830636948" height="19.072847682119207"></rect><text></text></g><g transform="translate(3.088158369064331,214.03973388671875)" class="nv-bar positive"><rect width="17.266244849236475" height="19.072847682119207"></rect><text></text></g><g transform="translate(0.6635167598724365,235.23178100585938)" class="nv-bar positive"><rect width="5.3420389319860675" height="19.072847682119207"></rect><text></text></g><g transform="translate(1.58500337600708,256.423828125)" class="nv-bar positive"><rect width="4.278106479062511" height="19.072847682119207"></rect><text></text></g><g transform="translate(0.40907132625579834,277.61590576171875)" class="nv-bar positive"><rect width="1.295392505583585" height="19.072847682119207"></rect><text></text></g><g transform="translate(0.011795160360634327,298.8079528808594)" class="nv-bar positive"><rect width="0.8651748913552026" height="19.072847682119207"></rect><text></text></g></g></g></g></g></g><g class="nv-legendWrap" transform="translate(180,-30)"><g class="nvd3 nv-legend" transform="translate(0,5)"><g transform="translate(397,5)"><g class="nv-series" transform="translate(0,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(31, 119, 180); stroke: rgb(31, 119, 180);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">fatalities</text></g><g class="nv-series" transform="translate(74,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(174, 199, 232); stroke: rgb(174, 199, 232);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">injuries</text></g></g></g></g><g class="nv-controlsWrap" transform="translate(0,-30)"><g class="nvd3 nv-legend" transform="translate(0,5)"><g transform="translate(32,5)"><g class="nv-series disabled" transform="translate(0,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(68, 68, 68); stroke: rgb(68, 68, 68);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">Grouped</text></g><g class="nv-series" transform="translate(76,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(68, 68, 68); stroke: rgb(68, 68, 68);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">Stacked</text></g></g></g></g></g></g></svg></div>
+
+<script type="text/javascript">
+ $(document).ready(function(){
+      drawchart14d0f513af31b()
+    });
+    function drawchart14d0f513af31b(){  
+      var opts = {
+ "dom": "chart14d0f513af31b",
+"width":    800,
+"height":    400,
+"x": "event_type",
+"y": "value",
+"group": "variable",
+"type": "multiBarHorizontalChart",
+"id": "chart14d0f513af31b" 
+},
+        data = [
+ {
+ "event_type": "hurricane",
+"variable": "fatalities",
+"value": 0.3879310344828 
+},
+{
+ "event_type": "heat",
+"variable": "fatalities",
+"value": 1.072346179851 
+},
+{
+ "event_type": "tornado",
+"variable": "fatalities",
+"value": 0.07903914292888 
+},
+{
+ "event_type": "fog",
+"variable": "fatalities",
+"value": 0.04301646309081 
+},
+{
+ "event_type": "other",
+"variable": "fatalities",
+"value": 0.07794618001856 
+},
+{
+ "event_type": "fire",
+"variable": "fatalities",
+"value": 0.02122641509434 
+},
+{
+ "event_type": "ocean",
+"variable": "fatalities",
+"value": 0.3301013662406 
+},
+{
+ "event_type": "lightning",
+"variable": "fatalities",
+"value": 0.05179080824089 
+},
+{
+ "event_type": "cold",
+"variable": "fatalities",
+"value": 0.2399103139013 
+},
+{
+ "event_type": "snow",
+"variable": "fatalities",
+"value": 0.01969147005445 
+},
+{
+ "event_type": "flood",
+"variable": "fatalities",
+"value": 0.01803151160496 
+},
+{
+ "event_type": "wind",
+"variable": "fatalities",
+"value": 0.00387422116881 
+},
+{
+ "event_type": "rain",
+"variable": "fatalities",
+"value": 0.009254709254709 
+},
+{
+ "event_type": "drought",
+"variable": "fatalities",
+"value": 0.002388535031847 
+},
+{
+ "event_type": "hail",
+"variable": "fatalities",
+"value": 6.887099773414e-05 
+},
+{
+ "event_type": "hurricane",
+"variable": "injuries",
+"value": 3.816091954023 
+},
+{
+ "event_type": "heat",
+"variable": "injuries",
+"value": 3.119675456389 
+},
+{
+ "event_type": "tornado",
+"variable": "injuries",
+"value": 1.276148759869 
+},
+{
+ "event_type": "fog",
+"variable": "injuries",
+"value": 0.5719596388741 
+},
+{
+ "event_type": "other",
+"variable": "injuries",
+"value": 0.4444788122487 
+},
+{
+ "event_type": "fire",
+"variable": "injuries",
+"value": 0.3792452830189 
+},
+{
+ "event_type": "ocean",
+"variable": "injuries",
+"value": 0.343763772587 
+},
+{
+ "event_type": "lightning",
+"variable": "injuries",
+"value": 0.3316640253566 
+},
+{
+ "event_type": "cold",
+"variable": "injuries",
+"value": 0.3127802690583 
+},
+{
+ "event_type": "snow",
+"variable": "injuries",
+"value": 0.1419918330309 
+},
+{
+ "event_type": "flood",
+"variable": "injuries",
+"value": 0.100816236488 
+},
+{
+ "event_type": "wind",
+"variable": "injuries",
+"value": 0.03119174232717 
+},
+{
+ "event_type": "rain",
+"variable": "injuries",
+"value": 0.02497952497952 
+},
+{
+ "event_type": "drought",
+"variable": "injuries",
+"value": 0.007563694267516 
+},
+{
+ "event_type": "hail",
+"variable": "injuries",
+"value": 0.005051687683799 
+} 
+]
+  
+      if(!(opts.type==="pieChart" || opts.type==="sparklinePlus")) {
+        var data = d3.nest()
+          .key(function(d){
+            //return opts.group === undefined ? 'main' : d[opts.group]
+            //instead of main would think a better default is opts.x
+            return opts.group === undefined ? opts.y : d[opts.group];
+          })
+          .entries(data);
+      }
+      
+      if (opts.disabled != undefined){
+        data.map(function(d, i){
+          d.disabled = opts.disabled[i]
+        })
+      }
+      
+      nv.addGraph(function() {
+        var chart = nv.models[opts.type]()
+          .x(function(d) { return d[opts.x] })
+          .y(function(d) { return d[opts.y] })
+          .width(opts.width)
+          .height(opts.height)
+         
+        chart
+  .stacked(true)
+          
+        
+
+        
+        
+        
+      
+       d3.select("#" + opts.id)
+        .append('svg')
+        .datum(data)
+        .transition().duration(500)
+        .call(chart);
+
+       nv.utils.windowResize(chart.update);
+       return chart;
+      });
+    };
+</script>
+
+<p><strong>Figure 2: Human fatalities and injuries per event by event type</strong>  </p>
+
+<p>In terms of individual events Hurricanes and Heat events are far more dangerous.<br>
+Tornadoes, Ocean, and Cold are next. </p>
+
+<hr>
+
+<h3>Across the United States, which types of events have the greatest economic consequences?</h3>
+
+<p>Lets look at the economic damage in <strong>Total</strong> and <strong>Per Event</strong>.<br>
+Choose which group to view in the legend.</p>
+
+<pre><code class="r"><span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">ddply</span><span class="paren">(</span><span class="identifier">df</span>, .<span class="paren">(</span><span class="identifier">event_type</span><span class="paren">)</span>, <span class="identifier">summarise</span>,
+             <span class="identifier">property_damage_total</span> <span class="operator">=</span> <span class="identifier">sum</span><span class="paren">(</span><span class="identifier">PROPDMG</span><span class="paren">)</span>,
+             <span class="identifier">property_damage_mean</span> <span class="operator">=</span> <span class="identifier">mean</span><span class="paren">(</span><span class="identifier">PROPDMG</span><span class="paren">)</span>
+            <span class="paren">)</span>
+
+<span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">arrange</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">desc</span><span class="paren">(</span><span class="identifier">property_damage_total</span><span class="paren">)</span><span class="paren">)</span>
+
+<span class="identifier">df3</span> <span class="operator">&lt;-</span> <span class="identifier">melt</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">id.vars</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="string">'event_type'</span><span class="paren">)</span><span class="paren">)</span>
+
+<span class="identifier">p1</span> <span class="operator">&lt;-</span> <span class="identifier">nPlot</span><span class="paren">(</span><span class="identifier">value</span> <span class="operator">~</span> <span class="identifier">event_type</span>, <span class="identifier">group</span> <span class="operator">=</span> <span class="string">'variable'</span>, <span class="identifier">data</span> <span class="operator">=</span> <span class="identifier">df3</span>, <span class="identifier">type</span> <span class="operator">=</span> <span class="string">'multiBarHorizontalChart'</span><span class="paren">)</span>
+<span class="identifier">p1</span><span class="operator">$</span><span class="identifier">chart</span><span class="paren">(</span><span class="identifier">stacked</span> <span class="operator">=</span> <span class="literal">FALSE</span><span class="paren">)</span>
+<span class="identifier">p1</span><span class="operator">$</span><span class="identifier">show</span><span class="paren">(</span><span class="string">'inline'</span>, <span class="identifier">include_assets</span> <span class="operator">=</span> <span class="literal">TRUE</span>, <span class="identifier">cdn</span> <span class="operator">=</span> <span class="literal">TRUE</span><span class="paren">)</span>
+</code></pre>
+
+<p><link rel="stylesheet" href="http://nvd3.org/assets/css/nv.d3.css"></p>
+
+<script type="text/javascript" src="jquery.min.js"></script>
+
+<script type="text/javascript" src="d3.v3.min.js"></script>
+
+<script type="text/javascript" src="nv.d3.min-new.js"></script>
+
+<script type="text/javascript" src="fisheye.js"></script> 
+
+<p><style>
+  .rChart {
+    display: block;
+    margin-left: auto; 
+    margin-right: auto;
+    width: 800px;
+    height: 400px;
+  }<br/>
+  </style></p>
+
+<div id="chart14d0f46d44cc4" class="rChart nvd3"><svg><g class="nvd3 nv-wrap nv-multiBarHorizontalChart" transform="translate(60,30)"><g><g class="nv-x nv-axis"><g class="nvd3 nv-wrap nv-axis"><g><g class="tick" transform="translate(0,11.655629139072849)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">tornado</text></g><g class="tick" transform="translate(0,32.8476821192053)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">wind</text></g><g class="tick" transform="translate(0,54.03973509933775)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">flood</text></g><g class="tick" transform="translate(0,75.2317880794702)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">hail</text></g><g class="tick" transform="translate(0,96.42384105960265)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">lightning</text></g><g class="tick" transform="translate(0,117.6158940397351)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">snow</text></g><g class="tick" transform="translate(0,138.80794701986758)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">fire</text></g><g class="tick" transform="translate(0,160.00000000000003)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">other</text></g><g class="tick" transform="translate(0,181.19205298013247)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">rain</text></g><g class="tick" transform="translate(0,202.38410596026492)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">hurricane</text></g><g class="tick" transform="translate(0,223.57615894039736)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">fog</text></g><g class="tick" transform="translate(0,244.76821192052984)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">ocean</text></g><g class="tick" transform="translate(0,265.9602649006623)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">cold</text></g><g class="tick" transform="translate(0,287.1523178807947)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">drought</text></g><g class="tick" transform="translate(0,308.3443708609272)" style="opacity: 1;"><line x2="720" y2="0" style="opacity: 1;"></line><text x="-5" dy=".32em" y="0" style="text-anchor: end; opacity: 1;">heat</text></g><path class="domain" d="M0,0H0V320H0"></path><text class="nv-axislabel" transform="rotate(-90)" y="-63" x="-1.0596026490066226" style="text-anchor: middle; opacity: 1;"></text></g></g></g><g class="nv-y nv-axis" transform="translate(0,320)"><g class="nvd3 nv-wrap nv-axis"><g><g class="tick" transform="translate(0,0)" style="opacity: 1;"><line y2="-320" x2="0"></line></g><g class="tick" transform="translate(111.58526445168346,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">500,000.0</text></g><g class="tick" transform="translate(223.17052890336691,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">1,000,000.0</text></g><g class="tick" transform="translate(334.7557933550504,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">1,500,000.0</text></g><g class="tick" transform="translate(446.34105780673383,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">2,000,000.0</text></g><g class="tick" transform="translate(557.9263222584174,0)" style="opacity: 1;"><line y2="-320" x2="0"></line><text y="3" dy=".71em" x="0" style="text-anchor: middle;">2,500,000.0</text></g><path class="domain" d="M0,0V0H720V0"></path><text class="nv-axislabel" text-anchor="middle" y="36" x="360"></text></g><g class="nv-axisMaxMin" transform="translate(0,0)"><text dy=".71em" y="3" transform="rotate(0 0,0)" style="text-anchor: middle;">0.0</text></g><g class="nv-axisMaxMin" transform="translate(720,0)"><text dy=".71em" y="3" transform="rotate(0 0,0)" style="text-anchor: middle;">3,226,232.4</text></g></g></g><g class="nv-barsWrap"><g class="nvd3 nv-wrap nv-multibarHorizontal" transform="translate(0,0)"><defs></defs><g><g class="nv-groups"><g class="nv-group nv-series-0" style="stroke-opacity: 1; fill-opacity: 0.75; fill: rgb(31, 119, 180); stroke: rgb(31, 119, 180);"><g transform="translate(0,2.119205298013245)" class="nv-bar positive"><rect width="720" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,23.311258278145697)" class="nv-bar positive"><rect width="697.13930593296" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,44.503311258278146)" class="nv-bar positive"><rect width="549.4867827936167" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,65.6953642384106)" class="nv-bar positive"><rect width="156.0673420046573" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,86.88741721854305)" class="nv-bar positive"><rect width="134.72922663935523" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,108.0794701986755)" class="nv-bar positive"><rect width="90.460214453736" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,129.27152317880797)" class="nv-bar positive"><rect width="27.946147860319694" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,150.4635761589404)" class="nv-bar positive"><rect width="24.113968428139668" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,171.65562913907286)" class="nv-bar positive"><rect width="12.921620489316014" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,192.8476821192053)" class="nv-bar positive"><rect width="5.466617898120199" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,214.03973509933775)" class="nv-bar positive"><rect width="3.851758182680724" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,235.23178807947022)" class="nv-bar positive"><rect width="3.301511158321872" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,256.4238410596027)" class="nv-bar positive"><rect width="1.9788620066073108" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,277.6158940397351)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,298.8079470198676)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g></g><g class="nv-group nv-series-1" style="stroke-opacity: 1; fill-opacity: 0.75; fill: rgb(174, 199, 232); stroke: rgb(174, 199, 232);"><g transform="translate(0,11.655629139072849)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,32.8476821192053)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,54.03973509933775)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,75.2317880794702)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,96.42384105960265)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,117.6158940397351)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,138.80794701986758)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,160.00000000000003)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,181.19205298013247)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,202.38410596026492)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,223.57615894039736)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,244.76821192052984)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,265.9602649006623)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,287.1523178807947)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g><g transform="translate(0,308.3443708609272)" class="nv-bar positive"><rect width="1" height="9.536423841059603"></rect><text></text></g></g></g></g></g></g><g class="nv-legendWrap" transform="translate(180,-30)"><g class="nvd3 nv-legend" transform="translate(0,5)"><g transform="translate(221,5)"><g class="nv-series" transform="translate(0,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(31, 119, 180); stroke: rgb(31, 119, 180);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">property_damage_total</text></g><g class="nv-series" transform="translate(155,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(174, 199, 232); stroke: rgb(174, 199, 232);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">property_damage_mean</text></g></g></g></g><g class="nv-controlsWrap" transform="translate(0,-30)"><g class="nvd3 nv-legend" transform="translate(0,5)"><g transform="translate(32,5)"><g class="nv-series" transform="translate(0,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(68, 68, 68); stroke: rgb(68, 68, 68);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">Grouped</text></g><g class="nv-series disabled" transform="translate(76,5)"><circle class="nv-legend-symbol" r="5" style="stroke-width: 2px; fill: rgb(68, 68, 68); stroke: rgb(68, 68, 68);"></circle><text text-anchor="start" class="nv-legend-text" dy=".32em" dx="8">Stacked</text></g></g></g></g></g></g></svg></div>
+
+<script type="text/javascript">
+ $(document).ready(function(){
+      drawchart14d0f46d44cc4()
+    });
+    function drawchart14d0f46d44cc4(){  
+      var opts = {
+ "dom": "chart14d0f46d44cc4",
+"width":    800,
+"height":    400,
+"x": "event_type",
+"y": "value",
+"group": "variable",
+"type": "multiBarHorizontalChart",
+"id": "chart14d0f46d44cc4" 
+},
+        data = [
+ {
+ "event_type": "tornado",
+"variable": "property_damage_total",
+"value":     3226232.44 
+},
+{
+ "event_type": "wind",
+"variable": "property_damage_total",
+"value":     3123796.45 
+},
+{
+ "event_type": "flood",
+"variable": "property_damage_total",
+"value":     2462183.45 
+},
+{
+ "event_type": "hail",
+"variable": "property_damage_total",
+"value":      699318.78 
+},
+{
+ "event_type": "lightning",
+"variable": "property_damage_total",
+"value":      603705.28 
+},
+{
+ "event_type": "snow",
+"variable": "property_damage_total",
+"value":      405341.22 
+},
+{
+ "event_type": "fire",
+"variable": "property_damage_total",
+"value":      125223.29 
+},
+{
+ "event_type": "other",
+"variable": "property_damage_total",
+"value":      108051.76 
+},
+{
+ "event_type": "rain",
+"variable": "property_damage_total",
+"value":       57900.21 
+},
+{
+ "event_type": "hurricane",
+"variable": "property_damage_total",
+"value":       24495.25 
+},
+{
+ "event_type": "fog",
+"variable": "property_damage_total",
+"value":       17259.26 
+},
+{
+ "event_type": "ocean",
+"variable": "property_damage_total",
+"value":       14793.67 
+},
+{
+ "event_type": "cold",
+"variable": "property_damage_total",
+"value":        8867.04 
+},
+{
+ "event_type": "drought",
+"variable": "property_damage_total",
+"value":        4299.05 
+},
+{
+ "event_type": "heat",
+"variable": "property_damage_total",
+"value":        3032.86 
+},
+{
+ "event_type": "tornado",
+"variable": "property_damage_mean",
+"value":  45.0050559384 
+},
+{
+ "event_type": "wind",
+"variable": "property_damage_mean",
+"value": 8.589267802445 
+},
+{
+ "event_type": "flood",
+"variable": "property_damage_mean",
+"value": 28.58782321456 
+},
+{
+ "event_type": "hail",
+"variable": "property_damage_mean",
+"value": 2.408139105641 
+},
+{
+ "event_type": "lightning",
+"variable": "property_damage_mean",
+"value": 38.26974833597 
+},
+{
+ "event_type": "snow",
+"variable": "property_damage_mean",
+"value": 9.195581215971 
+},
+{
+ "event_type": "fire",
+"variable": "property_damage_mean",
+"value": 29.53379481132 
+},
+{
+ "event_type": "other",
+"variable": "property_damage_mean",
+"value": 33.42151562017 
+},
+{
+ "event_type": "rain",
+"variable": "property_damage_mean",
+"value": 4.742031941032 
+},
+{
+ "event_type": "hurricane",
+"variable": "property_damage_mean",
+"value": 70.38864942529 
+},
+{
+ "event_type": "fog",
+"variable": "property_damage_mean",
+"value": 9.165831120552 
+},
+{
+ "event_type": "ocean",
+"variable": "property_damage_mean",
+"value": 6.519907448215 
+},
+{
+ "event_type": "cold",
+"variable": "property_damage_mean",
+"value": 9.940627802691 
+},
+{
+ "event_type": "drought",
+"variable": "property_damage_mean",
+"value": 1.711405254777 
+},
+{
+ "event_type": "heat",
+"variable": "property_damage_mean",
+"value": 1.025307640297 
+} 
+]
+  
+      if(!(opts.type==="pieChart" || opts.type==="sparklinePlus")) {
+        var data = d3.nest()
+          .key(function(d){
+            //return opts.group === undefined ? 'main' : d[opts.group]
+            //instead of main would think a better default is opts.x
+            return opts.group === undefined ? opts.y : d[opts.group];
+          })
+          .entries(data);
+      }
+      
+      if (opts.disabled != undefined){
+        data.map(function(d, i){
+          d.disabled = opts.disabled[i]
+        })
+      }
+      
+      nv.addGraph(function() {
+        var chart = nv.models[opts.type]()
+          .x(function(d) { return d[opts.x] })
+          .y(function(d) { return d[opts.y] })
+          .width(opts.width)
+          .height(opts.height)
+         
+        chart
+  .stacked(false)
+          
+        
+
+        
+        
+        
+      
+       d3.select("#" + opts.id)
+        .append('svg')
+        .datum(data)
+        .transition().duration(500)
+        .call(chart);
+
+       nv.utils.windowResize(chart.update);
+       return chart;
+      });
+    };
+</script>
+
+<p><strong>Figure 3: Total and mean property damage by event type</strong>  </p>
+
+<p>Tornados, Wind, and Flood have done the most damage.
+Per event, Hurricane, Tornados, and Lightning are the most damaging</p>
+
+<hr>
+
+
+
+
+
+</body></html>
